@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const code = searchParams.get('code');
+  const code = searchParams.get('code'); 
 
   if (!code) {
     return NextResponse.json({ error: 'Kein Code von Discord erhalten.' }, { status: 400 });
