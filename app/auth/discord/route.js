@@ -8,3 +8,4 @@ export function GET() {
   
   return NextResponse.redirect(discordLoginUrl);
 }
+ 
