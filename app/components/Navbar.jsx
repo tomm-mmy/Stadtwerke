@@ -9,7 +9,9 @@ export default async function Navbar() {
   let user = null;
   if (userCookie) {
     try {
-      user = JSON.parse(decodeURIComponent(userCookie.value));
+      const rawValue = userCookie.value;
+      const decodedValue = rawValue.includes('%') ? decodeURIComponent(rawValue) : rawValue;
+      user = JSON.parse(decodedValue);
     } catch (e) {
       user = null;
     }
@@ -33,7 +35,6 @@ export default async function Navbar() {
       zIndex: 1000,
       fontFamily: 'sans-serif'
     }}>
-      {/* Logo & Markenname */}
       <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: '#fff', fontWeight: 'bold' }}>
         <div style={{ 
           width: '38px', 
@@ -61,7 +62,6 @@ export default async function Navbar() {
         <li><Link href="/" style={{ color: '#f8fafc', textDecoration: 'none', fontWeight: '500', fontSize: '15px' }}>Startseite</Link></li>
       </ul>
 
-      {/* Rechts: Login oder Profil mit Dropdown */}
       <div>
         {user ? (
           <div className="dropdown-wrapper" style={{ position: 'relative', display: 'inline-block', paddingBottom: '10px', marginBottom: '-10px' }}>
@@ -80,7 +80,6 @@ export default async function Navbar() {
               <span style={{ fontSize: '10px', color: '#94a3b8' }}>▼</span>
             </div>
             
-            {/* Dropdown-Menü (jetzt ohne Lücke zum Hovern) */}
             <div className="dropdown-content" style={{
               position: 'absolute',
               right: 0,
