@@ -1,9 +1,8 @@
-import { NextResponse } from 'next/server';
-import axios from 'axios';
+import { NextResponse } from 'main/server'; // bzw. next/server
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const code = searchParams.get('code'); 
+  const code = searchParams.get('code');
 
   if (!code) {
     return NextResponse.json({ error: 'Kein Code von Discord erhalten.' }, { status: 400 });
@@ -12,36 +11,71 @@ export async function GET(request) {
   const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
   const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
   const REDIRECT_URI = 'https://stadtwerke-neubruecken.vercel.app/auth/discord/callback';
+  const GUILD_ID = process.env.DISCORD_GUILD_ID; // Die ID deines Discord-Servers
 
   try {
-    // Token bei Discord anfordern
-    const tokenResponse = await axios.post('https://discord.com/api/oauth2/token', new URLSearchParams({
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      grant_type: 'authorization_code',
-      code: code,
-      redirect_uri: REDIRECT_URI,
-    }), {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    // 1. Token bei Discord anfordern
+    const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: REDIRECT_URI,
+      }),
     });
 
-    const accessToken = tokenResponse.data.access_token;
+    const tokenData = await tokenResponse.json();
+    if (!tokenData.access_token) {
+      throw new Error('Kein Access Token erhalten.');
+    }
 
-    // User-Daten von Discord abrufen
-    const userResponse = await axios.get('https://discord.com/api/users/@me', {
-      headers: { Authorization: `Bearer ${accessToken}` }
+    const accessToken = tokenData.access_token;
+
+    // 2. User-Daten von Discord abrufen
+    const userResponse = await fetch('https://discord.com/api/users/@me', {
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
+    const discordUser = await userResponse.json();
 
-    const discordUser = userResponse.data;
+    // 3. VERIFY-SYSTEM: Prüfen, ob der User auf dem Server ist
+    let isVerified = false;
+    if (GUILD_ID) {
+      const guildsResponse = await fetch('https://discord.com/api/users/@me/guilds', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      const userGuilds = await guildsResponse.json();
+      
+      // Prüfen ob die Server-ID in der Liste der User-Server ist
+      isVerified = userGuilds.some(guild => guild.id === GUILD_ID);
+    } else {
+      // Falls keine Guild-ID hinterlegt ist, gilt er automatisch als eingeloggt
+      isVerified = true; 
+    }
 
+    if (!isVerified) {
+      // Wenn er nicht auf dem Discord-Server ist, Abbruch / Fehlermeldung
+      return NextResponse.redirect(new URL('/unauthorized', request.url));
+    }
 
-    console.log('Erfolgreich eingeloggt:', discordUser.username);
+    console.log(`[VERIFY] User ${discordUser.username} erfolgreich verifiziert & eingeloggt!`);
 
+    // 4. Erfolgreich: Weiterleitung zum Antrags-Dashboard oder der Hauptseite
+    const response = NextResponse.redirect(new URL('/dashboard', request.url));
+    
+    // Optional: User-ID in einem Cookie speichern, damit die Website weiß, wer eingeloggt ist
+    response.cookies.set('discord_user', JSON.stringify({
+      id: discordUser.id,
+      username: discordUser.username,
+      avatar: discordUser.avatar
+    }), { httpOnly: true, secure: true, path: '/' });
 
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+    return response;
 
   } catch (error) {
-    console.error('Auth Fehler:', error.response?.data || error.message);
+    console.error('Auth & Verify Fehler:', error.message);
     return NextResponse.json({ error: 'Authentifizierung fehlgeschlagen.' }, { status: 500 });
   }
 }
