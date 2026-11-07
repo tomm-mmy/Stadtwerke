@@ -14,7 +14,6 @@ export async function GET(request) {
   const GUILD_ID = process.env.DISCORD_GUILD_ID;
 
   try {
-    // 1. Token bei Discord anfordern
     const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -34,20 +33,18 @@ export async function GET(request) {
 
     const accessToken = tokenData.access_token;
 
-    // 2. User-Daten von Discord abrufen (inkl. E-Mail)
+    // User-Daten (inklusive E-Mail) von Discord abrufen
     const userResponse = await fetch('https://discord.com/api/users/@me', {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const discordUser = await userResponse.json();
 
-    // 3. VERIFY-SYSTEM: Prüfen, ob der User auf dem Server ist
     let isVerified = false;
     if (GUILD_ID) {
       const guildsResponse = await fetch('https://discord.com/api/users/@me/guilds', {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       const userGuilds = await guildsResponse.json();
-      
       isVerified = userGuilds.some(guild => guild.id === GUILD_ID);
     } else {
       isVerified = true;
@@ -57,17 +54,15 @@ export async function GET(request) {
       return NextResponse.redirect(new URL('/unauthorized', request.url));
     }
 
-    console.log(`[VERIFY] User ${discordUser.username} erfolgreich verifiziert & eingeloggt!`);
-
-    // 4. Erweiterte Benutzerdaten (inkl. E-Mail, Global Name, Locale, MFA) codieren und als Cookie setzen
+    // Erweiterte Profildaten für das Dashboard einpacken
     const userData = JSON.stringify({
       id: discordUser.id,
       username: discordUser.username,
       global_name: discordUser.global_name || discordUser.username,
       avatar: discordUser.avatar,
-      email: discordUser.email || 'Keine E-Mail von Discord freigegeben',
+      email: discordUser.email || 'Nicht öffentlich',
       locale: discordUser.locale || 'de',
-      mfa_enabled: discordUser.mfa_enabled ? 'Aktiviert' : 'Deaktiviert'
+      mfa_enabled: discordUser.mfa_enabled ? 'Aktiviert (Sicher)' : 'Deaktiviert'
     });
 
     const response = NextResponse.redirect(new URL('/dashboard', request.url));
