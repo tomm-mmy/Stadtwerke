@@ -1,77 +1,70 @@
-import { NextResponse } from 'next/server';
+import Link from 'next/link';
+import Image from 'next/image';
+import { cookies } from 'next/headers';
 
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const code = searchParams.get('code');
-
-  if (!code) {
-    return NextResponse.json({ error: 'Kein Code von Discord erhalten.' }, { status: 400 });
+export default async function Navbar() {
+  const cookieStore = await cookies();
+  const userCookie = cookieStore.get('discord_user');
+  
+  let user = null;
+  if (userCookie) {
+    try {
+      user = JSON.parse(userCookie.value);
+    } catch (e) {
+      user = null;
+    }
   }
 
-  const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
-  const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
-  const REDIRECT_URI = 'https://stadtwerke-neubruecken.vercel.app/auth/discord/callback';
-  const GUILD_ID = process.env.DISCORD_GUILD_ID;
-
-  try {
-    // 1. Token bei Discord anfordern
-    const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        grant_type: 'authorization_code',
-        code: code,
-        redirect_uri: REDIRECT_URI,
-      }),
-    });
-
-    const tokenData = await tokenResponse.json();
-    if (!tokenData.access_token) {
-      throw new Error('Kein Access Token erhalten.');
-    }
-
-    const accessToken = tokenData.access_token;
-
-    // 2. User-Daten von Discord abrufen
-    const userResponse = await fetch('https://discord.com/api/users/@me', {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    const discordUser = await userResponse.json();
-
-    // 3. VERIFY-SYSTEM: Prüfen, ob der User auf dem Server ist
-    let isVerified = false;
-    if (GUILD_ID) {
-      const guildsResponse = await fetch('https://discord.com/api/users/@me/guilds', {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      const userGuilds = await guildsResponse.json();
+  return (
+    <nav className="navbar">
+      <Link href="/" className="nav-brand">
+        <div style={{ 
+          width: '32px', 
+          height: '32px', 
+          borderRadius: '50%', 
+          overflow: 'hidden', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          border: '1px solid var(--border)',
+          backgroundColor: '#1e293b'
+        }}>
+          <Image 
+            src="/stadtwerke-neu.png" 
+            alt="Logo" 
+            width={32} 
+            height={32} 
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
+        <span>Stadtwerke Neubrücken</span>
+      </Link>
       
-      isVerified = userGuilds.some(guild => guild.id === GUILD_ID);
-    } else {
-      isVerified = true;
-    }
+      <ul className="nav-links">
+        <li><Link href="/">Startseite</Link></li>
+        <li><Link href="/entstoerungsdienst">Entstörungsdienst</Link></li>
+        <li><Link href="/fuehrungsebene">Führungsebene</Link></li>
+        <li><Link href="/personal">Personalabteilung</Link></li>
+        <li><Link href="/ausbilder">Ausbilder</Link></li>
+        <li><Link href="/mitarbeiter">Mitarbeiter</Link></li>
+      </ul>
 
-    if (!isVerified) {
-      return NextResponse.redirect(new URL('/unauthorized', request.url));
-    }
-
-    console.log(`[VERIFY] User ${discordUser.username} erfolgreich verifiziert & eingeloggt!`);
-
-    // 4. Weiterleitung zum Dashboard mit gesetztem Cookie
-    const response = NextResponse.redirect(new URL('/dashboard', request.url));
-    
-    response.cookies.set('discord_user', JSON.stringify({
-      id: discordUser.id,
-      username: discordUser.username,
-      avatar: discordUser.avatar
-    }), { httpOnly: true, secure: true, path: '/' });
-
-    return response;
-
-  } catch (error) {
-    console.error('Auth & Verify Fehler:', error.message);
-    return NextResponse.json({ error: 'Authentifizierung fehlgeschlagen.' }, { status: 500 });
-  }
+      <div>
+        {user ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ color: '#22c55e', fontSize: '14px', fontWeight: '500' }}>
+              ● {user.username}
+            </span>
+            <a href="/api/auth/logout" className="btn-nav-login" style={{ backgroundColor: '#ef4444' }}>
+              Abmelden
+            </a>
+          </div>
+        ) : (
+          <a href="/auth/discord" className="btn-nav-login">
+            Discord Anmelden
+          </a>
+        )}
+      </div>
+    </nav>
+  );
 }
