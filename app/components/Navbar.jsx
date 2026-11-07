@@ -3,68 +3,101 @@ import Image from 'next/image';
 import { cookies } from 'next/headers';
 
 export default async function Navbar() {
-  // Cookies asynchron auf dem Server auslesen
   const cookieStore = await cookies();
-  
-  // Wichtig: Hier suchen wir nach exakt dem Cookie, den deine route.js setzt ('discord_user')
   const userCookie = cookieStore.get('discord_user');
   
   let user = null;
   if (userCookie) {
     try {
-      const decodedValue = decodeURIComponent(userCookie.value);
-      user = JSON.parse(decodedValue);
+      user = JSON.parse(decodeURIComponent(userCookie.value));
     } catch (e) {
       user = null;
     }
   }
 
+  // Discord Avatar URL generieren
+  const avatarUrl = user?.avatar 
+    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`
+    : 'https://cdn.discordapp.com/embed/avatars/0.png';
+
   return (
-    <nav className="navbar">
-      <Link href="/" className="nav-brand">
+    <nav className="navbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 2rem', background: '#0f172a', borderBottom: '1px solid #1e293b', height: '70px' }}>
+      <Link href="/" className="nav-brand" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: '#fff', fontWeight: 'bold' }}>
         <div style={{ 
-          width: '32px', 
-          height: '32px', 
+          width: '38px', 
+          height: '38px', 
           borderRadius: '50%', 
           overflow: 'hidden', 
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'center',
-          border: '1px solid var(--border)',
+          border: '1px solid #334155',
           backgroundColor: '#1e293b'
         }}>
           <Image 
             src="/stadtwerke-neu.png" 
             alt="Logo" 
-            width={32} 
-            height={32} 
+            width={38} 
+            height={38} 
             style={{ objectFit: 'cover' }}
           />
         </div>
         <span>Stadtwerke Neubrücken</span>
       </Link>
       
-      <ul className="nav-links">
-        <li><Link href="/">Startseite</Link></li>
-        <li><Link href="/entstoerungsdienst">Entstörungsdienst</Link></li>
-        <li><Link href="/fuehrungsebene">Führungsebene</Link></li>
-        <li><Link href="/personal">Personalabteilung</Link></li>
-        <li><Link href="/ausbilder">Ausbilder</Link></li>
-        <li><Link href="/mitarbeiter">Mitarbeiter</Link></li>
+      <ul className="nav-links" style={{ display: 'flex', listStyle: 'none', gap: '20px', margin: 0, padding: 0 }}>
+        <li><Link href="/" style={{ color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }}>Startseite</Link></li>
+        <li><Link href="/entstoerungsdienst" style={{ color: '#94a3b8', textDecoration: 'none' }}>Entstörungsdienst</Link></li>
+        <li><Link href="/fuehrungsebene" style={{ color: '#94a3b8', textDecoration: 'none' }}>Führungsebene</Link></li>
+        <li><Link href="/personal" style={{ color: '#94a3b8', textDecoration: 'none' }}>Personalabteilung</Link></li>
+        <li><Link href="/ausbilder" style={{ color: '#94a3b8', textDecoration: 'none' }}>Ausbilder</Link></li>
+        <li><Link href="/mitarbeiter" style={{ color: '#94a3b8', textDecoration: 'none' }}>Mitarbeiter</Link></li>
       </ul>
 
       <div>
         {user ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ color: '#22c55e', fontSize: '14px', fontWeight: '500' }}>
-              ● {user.username}
-            </span>
-            <a href="/api/auth/logout" className="btn-nav-login" style={{ backgroundColor: '#ef4444' }}>
-              Abmelden
-            </a>
+          <div className="profile-dropdown-container" style={{ position: 'relative', display: 'inline-block' }}>
+            <div className="profile-trigger" style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#1e293b', padding: '6px 14px', borderRadius: '30px', border: '1px solid #334155', cursor: 'pointer' }}>
+              <img src={avatarUrl} alt="Avatar" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+              <span style={{ color: '#f8fafc', fontSize: '14px', fontWeight: '500' }}>{user.username}</span>
+              <span style={{ fontSize: '10px', color: '#94a3b8' }}>▼</span>
+            </div>
+            
+            {/* Dropdown Menü */}
+            <div className="dropdown-menu" style={{
+              position: 'absolute',
+              right: 0,
+              top: '110%',
+              background: '#1e293b',
+              border: '1px solid #334155',
+              borderRadius: '12px',
+              boxShadow: '0 10px 25px rgba(0,0,0,0.4)',
+              overflow: 'hidden',
+              minWidth: '180px',
+              display: 'none',
+              zIndex: 100
+            }}>
+              <Link href="/dashboard" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', borderBottom: '1px solid #334155', fontSize: '14px' }}>📊 Dashboard</Link>
+              <a href="/api/auth/logout" style={{ display: 'block', padding: '10px 16px', color: '#ef4444', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>🚪 Abmelden</a>
+            </div>
+
+            <style jsx>{`
+              .profile-dropdown-container:hover .dropdown-menu {
+                display: block;
+              }
+            `}</style>
           </div>
         ) : (
-          <a href="/auth/discord" className="btn-nav-login">
+          <a href="/auth/discord" className="btn-nav-login" style={{
+            background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+            color: '#fff',
+            padding: '8px 18px',
+            borderRadius: '8px',
+            textDecoration: 'none',
+            fontWeight: '600',
+            fontSize: '14px',
+            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)'
+          }}>
             Discord Anmelden
           </a>
         )}
