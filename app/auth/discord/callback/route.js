@@ -59,15 +59,16 @@ export async function GET(request) {
 
     console.log(`[VERIFY] User ${discordUser.username} erfolgreich verifiziert & eingeloggt!`);
 
-    // 4. Weiterleitung zur Startseite (oder /dashboard) mit absolut sauberem Cookie-Set
-    const redirectUrl = new URL('/', request.url); // Oder new URL('/dashboard', request.url)
-    const response = NextResponse.redirect(redirectUrl);
-    
-    response.cookies.set('discord_user', JSON.stringify({
+    // 4. Benutzerdaten sicher codieren und als Cookie setzen
+    const userData = JSON.stringify({
       id: discordUser.id,
       username: discordUser.username,
       avatar: discordUser.avatar
-    }), { 
+    });
+
+    const response = NextResponse.redirect(new URL('/dashboard', request.url));
+    
+    response.cookies.set('discord_user', encodeURIComponent(userData), { 
       httpOnly: true, 
       secure: true, 
       path: '/' 
