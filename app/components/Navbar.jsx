@@ -21,13 +21,13 @@ export default async function Navbar() {
           border: '1px solid var(--border)',
           backgroundColor: '#1e293b'
         }}>
-          <Image 
-            src="/Stadtwerke Neu.png" 
-            alt="Logo" 
-            width={32} 
-            height={32} 
-            style={{ objectFit: 'cover' }}
-          />
+     <Image 
+  src="/stadtwerke-neu.png" 
+  alt="Logo" 
+  width={32} 
+  height={32} 
+  style={{ objectFit: 'cover' }}
+/>
         </div>
         <span>Stadtwerke Neubrücken</span>
       </Link>
