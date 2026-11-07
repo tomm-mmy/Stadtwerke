@@ -1,11 +1,15 @@
 import Link from 'next/link';
-import Image from 'next/image'; // Next.js optimiert Bilder automatisch
+import Image from 'next/image';
+import { cookies } from 'next/headers';
 
-export default function Navbar() {
+export default async function Navbar() {
+  // Cookies asynchron auf dem Server auslesen
+  const cookieStore = await cookies();
+  const isLoggedIn = cookieStore.has('discord_token') || cookieStore.has('session') || cookieStore.has('user');
+
   return (
     <nav className="navbar">
       <Link href="/" className="nav-brand">
-        {/* Hier holen wir das Logo aus dem public-Ordner für die Navbar */}
         <div style={{ 
           width: '32px', 
           height: '32px', 
@@ -18,7 +22,7 @@ export default function Navbar() {
           backgroundColor: '#1e293b'
         }}>
           <Image 
-            src="/logo.png" 
+            src="/Stadtwerke Neu.png" 
             alt="Logo" 
             width={32} 
             height={32} 
@@ -38,9 +42,18 @@ export default function Navbar() {
       </ul>
 
       <div>
-        <a href="/auth/discord" className="btn-nav-login">
-          Discord Anmelden
-        </a>
+        {isLoggedIn ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ color: '#22c55e', fontSize: '14px', fontWeight: '500' }}>● Angemeldet</span>
+            <a href="/api/auth/logout" className="btn-nav-login" style={{ backgroundColor: '#ef4444' }}>
+              Abmelden
+            </a>
+          </div>
+        ) : (
+          <a href="/auth/discord" className="btn-nav-login">
+            Discord Anmelden
+          </a>
+        )}
       </div>
     </nav>
   );
