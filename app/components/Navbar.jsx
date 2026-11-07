@@ -5,7 +5,19 @@ import { cookies } from 'next/headers';
 export default async function Navbar() {
   // Cookies asynchron auf dem Server auslesen
   const cookieStore = await cookies();
-  const isLoggedIn = cookieStore.has('discord_token') || cookieStore.has('session') || cookieStore.has('user');
+  
+  // Wichtig: Hier suchen wir nach exakt dem Cookie, den deine route.js setzt ('discord_user')
+  const userCookie = cookieStore.get('discord_user');
+  
+  let user = null;
+  if (userCookie) {
+    try {
+      const decodedValue = decodeURIComponent(userCookie.value);
+      user = JSON.parse(decodedValue);
+    } catch (e) {
+      user = null;
+    }
+  }
 
   return (
     <nav className="navbar">
@@ -21,13 +33,13 @@ export default async function Navbar() {
           border: '1px solid var(--border)',
           backgroundColor: '#1e293b'
         }}>
-     <Image 
-  src="/stadtwerke-neu.png" 
-  alt="Logo" 
-  width={32} 
-  height={32} 
-  style={{ objectFit: 'cover' }}
-/>
+          <Image 
+            src="/stadtwerke-neu.png" 
+            alt="Logo" 
+            width={32} 
+            height={32} 
+            style={{ objectFit: 'cover' }}
+          />
         </div>
         <span>Stadtwerke Neubrücken</span>
       </Link>
@@ -42,9 +54,11 @@ export default async function Navbar() {
       </ul>
 
       <div>
-        {isLoggedIn ? (
+        {user ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ color: '#22c55e', fontSize: '14px', fontWeight: '500' }}>● Angemeldet</span>
+            <span style={{ color: '#22c55e', fontSize: '14px', fontWeight: '500' }}>
+              ● {user.username}
+            </span>
             <a href="/api/auth/logout" className="btn-nav-login" style={{ backgroundColor: '#ef4444' }}>
               Abmelden
             </a>
