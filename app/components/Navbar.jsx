@@ -1,10 +1,31 @@
 import Link from 'next/link';
+import Image from 'next/image'; // Next.js optimiert Bilder automatisch
 
 export default function Navbar() {
   return (
     <nav className="navbar">
       <Link href="/" className="nav-brand">
-        ⚡ Stadtwerke Neubrücken
+        {/* Hier binden wir das Logo ein */}
+        <div style={{ 
+          width: '32px', 
+          height: '32px', 
+          borderRadius: '50%', 
+          overflow: 'hidden', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          border: '1px solid var(--border)',
+          backgroundColor: '#1e293b'
+        }}>
+          <Image 
+            src="/logo.png" // Lege dein Bild als "logo.png" in den "public"-Ordner
+            alt="Logo" 
+            width={32} 
+            height={32} 
+            style={{ objectFit: 'cover' }}
+          />
+        </div>
+        <span>Stadtwerke Neubrücken</span>
       </Link>
       
       <ul className="nav-links">
