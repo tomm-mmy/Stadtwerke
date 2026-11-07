@@ -13,7 +13,7 @@ export default async function Home() {
       <div className="hero-section">
         <div className="banner-container">
           <Image 
-            src="/stadtwerkebanner.png" 
+            src="/stadtwerkebannner.png" 
             alt="Stadtwerke Neubrücken Banner" 
             width={1000} 
             height={300} 
