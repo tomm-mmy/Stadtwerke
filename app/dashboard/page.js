@@ -1,48 +1,17 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 
-export default function DashboardPage() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Steuerung für den Unschärfe-Effekt (false = unscharf, true = klar)
-  const [revealed, setRevealed] = useState({
-    id: false,
-    email: false,
-  });
-
-  useEffect(() => {
-    const getCookie = (name) => {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-    };
-
+export default async function DashboardPage() {
+  const cookieStore = await cookies();
+  const userCookie = cookieStore.get('discord_user');
+  
+  let user = null;
+  if (userCookie) {
     try {
-      const userCookie = getCookie('discord_user');
-      if (userCookie) {
-        const decoded = JSON.parse(decodeURIComponent(userCookie));
-        setUser(decoded);
-      }
+      user = JSON.parse(decodeURIComponent(userCookie.value));
     } catch (e) {
-      console.error('Fehler beim Auslesen:', e);
-    } finally {
-      setLoading(false);
+      user = null;
     }
-  }, []);
-
-  const toggleReveal = (field) => {
-    setRevealed((prev) => ({ ...prev, [field]: !prev[field] }));
-  };
-
-  if (loading) {
-    return (
-      <div style={{ minHeight: '100vh', background: '#090d16', color: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: 'sans-serif' }}>
-        <p>Lade Dashboard...</p>
-      </div>
-    );
   }
 
   if (!user) {
@@ -93,70 +62,45 @@ export default function DashboardPage() {
           </div>
 
           <h3 style={{ fontSize: '1.1rem', marginBottom: '20px', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            🔒 Sensible Discord-Daten 
-            <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 'normal' }}>(Klicke auf die Boxen, um sie zu entblößen / unscharf zu schalten)</span>
+            🔒 Account-Details & Discord-Daten
           </h3>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
             
-            {/* E-Mail mit Blur */}
-            <div 
-              onClick={() => toggleReveal('email')}
-              style={{ background: '#161e2e', padding: '18px 22px', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', border: '1px solid #283548' }}
-            >
+            {/* E-Mail */}
+            <div style={{ background: '#161e2e', padding: '18px 22px', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #283548' }}>
               <div>
                 <span style={{ display: 'block', fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>DISCORD E-MAIL-ADRESSE</span>
-                <span style={{ 
-                  fontSize: '16px', 
-                  fontFamily: 'monospace', 
-                  color: '#f8fafc',
-                  filter: revealed.email ? 'none' : 'blur(6px)',
-                  transition: 'filter 0.2s ease'
-                }}>
-                  {user.email}
+                <span style={{ fontSize: '16px', fontFamily: 'monospace', color: '#f8fafc' }}>
+                  {user.email || 'Nicht öffentlich'}
                 </span>
               </div>
-              <span style={{ fontSize: '12px', background: '#0f172a', padding: '6px 14px', borderRadius: '8px', color: '#38bdf8', border: '1px solid #334155' }}>
-                {revealed.email ? '👁️ Verstecken' : '🔒 Unscharf (Klicken)'}
-              </span>
             </div>
 
-            {/* Discord ID mit Blur */}
-            <div 
-              onClick={() => toggleReveal('id')}
-              style={{ background: '#161e2e', padding: '18px 22px', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', border: '1px solid #283548' }}
-            >
+            {/* Discord ID */}
+            <div style={{ background: '#161e2e', padding: '18px 22px', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #283548' }}>
               <div>
                 <span style={{ display: 'block', fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>DISCORD USER ID</span>
-                <span style={{ 
-                  fontSize: '16px', 
-                  fontFamily: 'monospace', 
-                  color: '#f8fafc',
-                  filter: revealed.id ? 'none' : 'blur(6px)',
-                  transition: 'filter 0.2s ease'
-                }}>
+                <span style={{ fontSize: '16px', fontFamily: 'monospace', color: '#f8fafc' }}>
                   {user.id}
                 </span>
               </div>
-              <span style={{ fontSize: '12px', background: '#0f172a', padding: '6px 14px', borderRadius: '8px', color: '#38bdf8', border: '1px solid #334155' }}>
-                {revealed.id ? '👁️ Verstecken' : '🔒 Unscharf (Klicken)'}
-              </span>
             </div>
 
-            {/* Weitere Infos von Discord */}
+            {/* Weitere Infos */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '15px', marginTop: '10px' }}>
               <div style={{ background: '#161e2e', padding: '16px 20px', borderRadius: '14px', border: '1px solid #283548' }}>
                 <span style={{ display: 'block', fontSize: '11px', color: '#94a3b8', marginBottom: '4px', fontWeight: 'bold' }}>SPRACHE / LOCALE</span>
-                <span style={{ fontSize: '15px', color: '#f8fafc', textTransform: 'uppercase' }}>{user.locale}</span>
+                <span style={{ fontSize: '15px', color: '#f8fafc', textTransform: 'uppercase' }}>{user.locale || 'DE'}</span>
               </div>
 
               <div style={{ background: '#161e2e', padding: '16px 20px', borderRadius: '14px', border: '1px solid #283548' }}>
                 <span style={{ display: 'block', fontSize: '11px', color: '#94a3b8', marginBottom: '4px', fontWeight: 'bold' }}>2-FAKTOR-SCHUTZ</span>
-                <span style={{ fontSize: '15px', color: '#22c55e' }}>{user.mfa_enabled}</span>
+                <span style={{ fontSize: '15px', color: '#22c55e' }}>{user.mfa_enabled || 'Aktiviert'}</span>
               </div>
 
               <div style={{ background: '#161e2e', padding: '16px 20px', borderRadius: '14px', border: '1px solid #283548' }}>
-                <span style={{ display: 'block', fontSize: '11px', color: '#94a3b8', marginBottom: '4px', fontWeight: 'bold' }}>PORTAL-Rolle</span>
+                <span style={{ display: 'block', fontSize: '11px', color: '#94a3b8', marginBottom: '4px', fontWeight: 'bold' }}>PORTAL-ROLLE</span>
                 <span style={{ fontSize: '15px', color: '#38bdf8', fontWeight: '600' }}>Mitarbeiter / Bürger</span>
               </div>
             </div>
