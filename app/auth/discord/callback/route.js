@@ -54,21 +54,22 @@ export async function GET(request) {
       return NextResponse.redirect(new URL('/unauthorized', request.url));
     }
 
-    // Erweiterte Profildaten für das Dashboard einpacken
+    // Profildaten für das Dashboard einpacken
     const userData = JSON.stringify({
       id: discordUser.id,
       username: discordUser.username,
       global_name: discordUser.global_name || discordUser.username,
       avatar: discordUser.avatar,
-      email: discordUser.email || 'Nicht öffentlich',
+      email: discordUser.email || 'Nicht öffentlich hinterlegt',
       locale: discordUser.locale || 'de',
       mfa_enabled: discordUser.mfa_enabled ? 'Aktiviert (Sicher)' : 'Deaktiviert'
     });
 
     const response = NextResponse.redirect(new URL('/dashboard', request.url));
     
+    // WICHTIG: httpOnly: false, damit das Client-Dashboard den Cookie lesen kann!
     response.cookies.set('discord_user', encodeURIComponent(userData), { 
-      httpOnly: true, 
+      httpOnly: false, 
       secure: true, 
       path: '/' 
     });
