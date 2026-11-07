@@ -1,4 +1,4 @@
-import { NextResponse } from 'main/server'; // bzw. next/server
+import { NextResponse } from 'next/server';
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -11,7 +11,7 @@ export async function GET(request) {
   const CLIENT_ID = process.env.DISCORD_CLIENT_ID;
   const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
   const REDIRECT_URI = 'https://stadtwerke-neubruecken.vercel.app/auth/discord/callback';
-  const GUILD_ID = process.env.DISCORD_GUILD_ID; // Die ID deines Discord-Servers
+  const GUILD_ID = process.env.DISCORD_GUILD_ID;
 
   try {
     // 1. Token bei Discord anfordern
@@ -48,24 +48,20 @@ export async function GET(request) {
       });
       const userGuilds = await guildsResponse.json();
       
-      // Prüfen ob die Server-ID in der Liste der User-Server ist
       isVerified = userGuilds.some(guild => guild.id === GUILD_ID);
     } else {
-      // Falls keine Guild-ID hinterlegt ist, gilt er automatisch als eingeloggt
-      isVerified = true; 
+      isVerified = true;
     }
 
     if (!isVerified) {
-      // Wenn er nicht auf dem Discord-Server ist, Abbruch / Fehlermeldung
       return NextResponse.redirect(new URL('/unauthorized', request.url));
     }
 
     console.log(`[VERIFY] User ${discordUser.username} erfolgreich verifiziert & eingeloggt!`);
 
-    // 4. Erfolgreich: Weiterleitung zum Antrags-Dashboard oder der Hauptseite
+    // 4. Weiterleitung zum Dashboard mit gesetztem Cookie
     const response = NextResponse.redirect(new URL('/dashboard', request.url));
     
-    // Optional: User-ID in einem Cookie speichern, damit die Website weiß, wer eingeloggt ist
     response.cookies.set('discord_user', JSON.stringify({
       id: discordUser.id,
       username: discordUser.username,
