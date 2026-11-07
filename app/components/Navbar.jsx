@@ -31,9 +31,11 @@ export default async function Navbar() {
       height: '70px',
       position: 'sticky',
       top: 0,
-      zIndex: 1000
+      zIndex: 1000,
+      fontFamily: 'sans-serif'
     }}>
-      <Link href="/" className="nav-brand" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: '#fff', fontWeight: 'bold' }}>
+      {/* Logo & Markenname */}
+      <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: '#fff', fontWeight: 'bold' }}>
         <div style={{ 
           width: '38px', 
           height: '38px', 
@@ -56,43 +58,61 @@ export default async function Navbar() {
         <span>Stadtwerke Neubrücken</span>
       </Link>
       
-      <ul className="nav-links" style={{ display: 'flex', listStyle: 'none', gap: '20px', margin: 0, padding: 0, alignItems: 'center' }}>
-        <li><Link href="/" style={{ color: '#94a3b8', textDecoration: 'none' }}>Startseite</Link></li>
-        <li><Link href="/entstoerungsdienst" style={{ color: '#94a3b8', textDecoration: 'none' }}>Entstörungsdienst</Link></li>
-        <li><Link href="/fuehrungsebene" style={{ color: '#94a3b8', textDecoration: 'none' }}>Führungsebene</Link></li>
-        <li><Link href="/personal" style={{ color: '#94a3b8', textDecoration: 'none' }}>Personalabteilung</Link></li>
-        <li><Link href="/ausbilder" style={{ color: '#94a3b8', textDecoration: 'none' }}>Ausbilder</Link></li>
-        <li><Link href="/mitarbeiter" style={{ color: '#94a3b8', textDecoration: 'none' }}>Mitarbeiter</Link></li>
+      {/* Oben nur noch Startseite */}
+      <ul style={{ display: 'flex', listStyle: 'none', gap: '25px', margin: 0, padding: 0, alignItems: 'center' }}>
+        <li><Link href="/" style={{ color: '#f8fafc', textDecoration: 'none', fontWeight: '500', fontSize: '15px' }}>Startseite</Link></li>
       </ul>
 
+      {/* Rechts: Login oder Profil mit Kategorien-Dropdown */}
       <div>
         {user ? (
           <div className="dropdown-wrapper" style={{ position: 'relative', display: 'inline-block' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#1e293b', padding: '6px 14px', borderRadius: '30px', border: '1px solid #334155', cursor: 'pointer' }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '10px', 
+              background: '#1e293b', 
+              padding: '6px 14px', 
+              borderRadius: '30px', 
+              border: '1px solid #334155', 
+              cursor: 'pointer' 
+            }}>
               <img src={avatarUrl} alt="Avatar" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
               <span style={{ color: '#f8fafc', fontSize: '14px', fontWeight: '500' }}>{user.username}</span>
               <span style={{ fontSize: '10px', color: '#94a3b8' }}>▼</span>
             </div>
             
-            {/* Dropdown-Menü */}
+            {/* Dropdown-Menü mit Kategorien */}
             <div className="dropdown-content" style={{
               position: 'absolute',
               right: 0,
               top: 'calc(100% + 8px)',
-              background: '#1e293b',
+              background: '#0f172a',
               border: '1px solid #334155',
               borderRadius: '12px',
-              boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+              boxShadow: '0 15px 35px rgba(0,0,0,0.6)',
               overflow: 'hidden',
-              minWidth: '170px',
+              minWidth: '220px',
               display: 'none',
               zIndex: 100
             }}>
-              <Link href="/dashboard" style={{ display: 'block', padding: '12px 16px', color: '#cbd5e1', textDecoration: 'none', borderBottom: '1px solid #334155', fontSize: '14px' }}>📊 Dashboard</Link>
-              <a href="/api/auth/logout" style={{ display: 'block', padding: '12px 16px', color: '#ef4444', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>🚪 Abmelden</a>
+              <div style={{ padding: '10px 16px 6px 16px', fontSize: '11px', textTransform: 'uppercase', color: '#64748b', fontWeight: '700', letterSpacing: '0.5px' }}>
+                Bereiche & Navigation
+              </div>
+              <Link href="/entstoerungsdienst" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>⚡ Entstörungsdienst</Link>
+              <Link href="/fuehrungsebene" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>🏢 Führungsebene</Link>
+              <Link href="/personal" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>👥 Personalabteilung</Link>
+              <Link href="/ausbilder" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>🎓 Ausbilder</Link>
+              <Link href="/mitarbeiter" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px', borderBottom: '1px solid #1e293b' }}>🛡️ Mitarbeiter</Link>
+              
+              <div style={{ padding: '10px 16px 6px 16px', fontSize: '11px', textTransform: 'uppercase', color: '#64748b', fontWeight: '700', letterSpacing: '0.5px' }}>
+                Account
+              </div>
+              <Link href="/dashboard" style={{ display: 'block', padding: '10px 16px', color: '#38bdf8', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>📊 Dashboard</Link>
+              <a href="/api/auth/logout" style={{ display: 'block', padding: '10px 16px', color: '#ef4444', textDecoration: 'none', fontSize: '14px', fontWeight: '500', background: 'rgba(239, 68, 68, 0.05)' }}>🚪 Abmelden</a>
             </div>
 
-            {/* Einfaches CSS für den Hover-Effekt ohne styled-jsx */}
+            {/* Reines CSS-Hover für das Dropdown (ohne styled-jsx Build-Fehler) */}
             <style>{`
               .dropdown-wrapper:hover .dropdown-content {
                 display: block !important;
