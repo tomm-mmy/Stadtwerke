@@ -36,7 +36,7 @@ export default async function Navbar() {
           backgroundColor: '#1e293b'
         }}>
           <Image 
-            src="/stadtwerke-neu.png" 
+            src="/stadtwerkeprofdilbild.webp" 
             alt="Logo" 
             width={38} 
             height={38} 
@@ -69,7 +69,6 @@ export default async function Navbar() {
               <span style={{ fontSize: '10px', color: '#94a3b8' }}>▼</span>
             </div>
             
-            {/* Neues verfeinertes Profil-Dropdown-Menü */}
             <div className="dropdown-content" style={{
               position: 'absolute',
               right: 0,
