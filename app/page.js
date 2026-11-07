@@ -9,7 +9,6 @@ export default async function Home() {
 
   return (
     <main className="page-container">
-     
       <div className="hero-section">
         <div className="banner-container">
           <Image 
