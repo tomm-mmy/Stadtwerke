@@ -1,59 +1,22 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 
-export default function DashboardPage() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Zustände für das Zensieren der einzelnen Felder (false = zensiert, true = sichtbar)
-  const [revealed, setRevealed] = useState({
-    id: false,
-    email: false,
-  });
-
-  useEffect(() => {
-    // Da wir hier im Browser sind, lesen wir den Cookie aus oder holen die User-Daten
-    // Alternativ greifen wir auf den Cookie zu. In Next.js Client-Komponenten liest man Cookies meist über document.cookie aus
-    const getCookie = (name) => {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-    };
-
+export default async function DashboardPage() {
+  const cookieStore = await cookies();
+  const userCookie = cookieStore.get('discord_user');
+  
+  let user = null;
+  if (userCookie) {
     try {
-      const userCookie = getCookie('discord_user');
-      if (userCookie) {
-        const decoded = JSON.parse(decodeURIComponent(userCookie));
-        setUser(decoded);
-      }
+      user = JSON.parse(decodeURIComponent(userCookie.value));
     } catch (e) {
-      console.error('Fehler beim Auslesen des Users:', e);
-    } finally {
-      setLoading(false);
+      user = null;
     }
-  }, []);
-
-  // Umschalten der Zensur für ein bestimmtes Feld
-  const toggleReveal = (field) => {
-    setRevealed((prev) => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
-  };
-
-  if (loading) {
-    return (
-      <div style={{ minHeight: '100vh', background: '#090d16', color: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <p>Lade Dashboard...</p>
-      </div>
-    );
   }
 
   if (!user) {
     return (
-      <div style={{ minHeight: '100vh', background: '#090d16', color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
+      <div style={{ minHeight: '100vh', background: '#090d16', color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '20px', fontFamily: 'sans-serif' }}>
         <h2>Du bist nicht angemeldet.</h2>
         <a href="/auth/discord" style={{ background: '#6366f1', color: '#fff', padding: '10px 20px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>
           Jetzt mit Discord anmelden
@@ -66,7 +29,6 @@ export default function DashboardPage() {
     ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
     : 'https://cdn.discordapp.com/embed/avatars/0.png';
 
-  // Beispiel-E-Mail (Falls Discord-Email im Cookie gespeichert wurde, ansonsten Platzhalter)
   const userEmail = user.email || 'mitglied@neubruecken-rp.de'; 
 
   return (
@@ -93,41 +55,29 @@ export default function DashboardPage() {
           </div>
 
           <h3 style={{ fontSize: '1.2rem', marginBottom: '20px', color: '#cbd5e1', borderBottom: '1px solid #1f2937', paddingBottom: '10px' }}>
-            🔒 Private & Account-Details <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 'normal' }}>(Klicke auf die Felder, um sie ein- oder auszublenden)</span>
+            🔒 Account-Details
           </h3>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             
             {/* Discord ID */}
-            <div 
-              onClick={() => toggleReveal('id')}
-              style={{ background: '#1e293b', padding: '16px 20px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', border: '1px solid #334155', transition: 'border-color 0.2s' }}
-            >
+            <div style={{ background: '#1e293b', padding: '16px 20px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #334155' }}>
               <div>
                 <span style={{ display: 'block', fontSize: '12px', color: '#94a3b8', marginBottom: '4px' }}>DISCORD USER ID</span>
                 <span style={{ fontSize: '16px', fontFamily: 'monospace', color: '#f8fafc' }}>
-                  {revealed.id ? user.id : '••••••••••••••••••••'}
+                  {user.id}
                 </span>
               </div>
-              <span style={{ fontSize: '12px', background: '#0f172a', padding: '6px 12px', borderRadius: '6px', color: '#38bdf8' }}>
-                {revealed.id ? '👁️ Verstecken' : '🔒 Aufdecken'}
-              </span>
             </div>
 
             {/* E-Mail */}
-            <div 
-              onClick={() => toggleReveal('email')}
-              style={{ background: '#1e293b', padding: '16px 20px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', border: '1px solid #334155', transition: 'border-color 0.2s' }}
-            >
+            <div style={{ background: '#1e293b', padding: '16px 20px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #334155' }}>
               <div>
                 <span style={{ display: 'block', fontSize: '12px', color: '#94a3b8', marginBottom: '4px' }}>E-MAIL-ADRESSE</span>
                 <span style={{ fontSize: '16px', fontFamily: 'monospace', color: '#f8fafc' }}>
-                  {revealed.email ? userEmail : '••••••••••••@••••••.com'}
+                  {userEmail}
                 </span>
               </div>
-              <span style={{ fontSize: '12px', background: '#0f172a', padding: '6px 12px', borderRadius: '6px', color: '#38bdf8' }}>
-                {revealed.email ? '👁️ Verstecken' : '🔒 Aufdecken'}
-              </span>
             </div>
 
             {/* Status / Rolle */}
