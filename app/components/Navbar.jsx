@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <Link href="/" className="nav-brand">
-        {/* Hier binden wir das Logo ein */}
+        {/* Hier holen wir das Logo aus dem public-Ordner für die Navbar */}
         <div style={{ 
           width: '32px', 
           height: '32px', 
@@ -18,7 +18,7 @@ export default function Navbar() {
           backgroundColor: '#1e293b'
         }}>
           <Image 
-            src="/logo.png" // Lege dein Bild als "logo.png" in den "public"-Ordner
+            src="/logo.png" 
             alt="Logo" 
             width={32} 
             height={32} 
