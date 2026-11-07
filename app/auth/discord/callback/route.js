@@ -34,7 +34,7 @@ export async function GET(request) {
 
     const accessToken = tokenData.access_token;
 
-    // 2. User-Daten von Discord abrufen
+    // 2. User-Daten von Discord abrufen (inkl. E-Mail)
     const userResponse = await fetch('https://discord.com/api/users/@me', {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
@@ -59,11 +59,15 @@ export async function GET(request) {
 
     console.log(`[VERIFY] User ${discordUser.username} erfolgreich verifiziert & eingeloggt!`);
 
-    // 4. Benutzerdaten sicher codieren und als Cookie setzen
+    // 4. Erweiterte Benutzerdaten (inkl. E-Mail, Global Name, Locale, MFA) codieren und als Cookie setzen
     const userData = JSON.stringify({
       id: discordUser.id,
       username: discordUser.username,
-      avatar: discordUser.avatar
+      global_name: discordUser.global_name || discordUser.username,
+      avatar: discordUser.avatar,
+      email: discordUser.email || 'Keine E-Mail von Discord freigegeben',
+      locale: discordUser.locale || 'de',
+      mfa_enabled: discordUser.mfa_enabled ? 'Aktiviert' : 'Deaktiviert'
     });
 
     const response = NextResponse.redirect(new URL('/dashboard', request.url));
