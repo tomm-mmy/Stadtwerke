@@ -15,7 +15,6 @@ export default async function Navbar() {
     }
   }
 
-  // Discord Avatar URL generieren
   const avatarUrl = user?.avatar 
     ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`
     : 'https://cdn.discordapp.com/embed/avatars/0.png';
@@ -58,15 +57,14 @@ export default async function Navbar() {
         <span>Stadtwerke Neubrücken</span>
       </Link>
       
-      {/* Oben nur noch Startseite */}
       <ul style={{ display: 'flex', listStyle: 'none', gap: '25px', margin: 0, padding: 0, alignItems: 'center' }}>
         <li><Link href="/" style={{ color: '#f8fafc', textDecoration: 'none', fontWeight: '500', fontSize: '15px' }}>Startseite</Link></li>
       </ul>
 
-      {/* Rechts: Login oder Profil mit Kategorien-Dropdown */}
+      {/* Rechts: Login oder Profil mit Dropdown */}
       <div>
         {user ? (
-          <div className="dropdown-wrapper" style={{ position: 'relative', display: 'inline-block' }}>
+          <div className="dropdown-wrapper" style={{ position: 'relative', display: 'inline-block', paddingBottom: '10px', marginBottom: '-10px' }}>
             <div style={{ 
               display: 'flex', 
               alignItems: 'center', 
@@ -82,21 +80,21 @@ export default async function Navbar() {
               <span style={{ fontSize: '10px', color: '#94a3b8' }}>▼</span>
             </div>
             
-            {/* Dropdown-Menü mit Kategorien */}
+            {/* Dropdown-Menü (jetzt ohne Lücke zum Hovern) */}
             <div className="dropdown-content" style={{
               position: 'absolute',
               right: 0,
-              top: 'calc(100% + 8px)',
+              top: '100% - 2px',
               background: '#0f172a',
               border: '1px solid #334155',
               borderRadius: '12px',
-              boxShadow: '0 15px 35px rgba(0,0,0,0.6)',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.7)',
               overflow: 'hidden',
               minWidth: '220px',
               display: 'none',
               zIndex: 100
             }}>
-              <div style={{ padding: '10px 16px 6px 16px', fontSize: '11px', textTransform: 'uppercase', color: '#64748b', fontWeight: '700', letterSpacing: '0.5px' }}>
+              <div style={{ padding: '12px 16px 6px 16px', fontSize: '11px', textTransform: 'uppercase', color: '#64748b', fontWeight: '700', letterSpacing: '0.5px' }}>
                 Bereiche & Navigation
               </div>
               <Link href="/entstoerungsdienst" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>⚡ Entstörungsdienst</Link>
@@ -105,14 +103,13 @@ export default async function Navbar() {
               <Link href="/ausbilder" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>🎓 Ausbilder</Link>
               <Link href="/mitarbeiter" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px', borderBottom: '1px solid #1e293b' }}>🛡️ Mitarbeiter</Link>
               
-              <div style={{ padding: '10px 16px 6px 16px', fontSize: '11px', textTransform: 'uppercase', color: '#64748b', fontWeight: '700', letterSpacing: '0.5px' }}>
+              <div style={{ padding: '12px 16px 6px 16px', fontSize: '11px', textTransform: 'uppercase', color: '#64748b', fontWeight: '700', letterSpacing: '0.5px' }}>
                 Account
               </div>
               <Link href="/dashboard" style={{ display: 'block', padding: '10px 16px', color: '#38bdf8', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>📊 Dashboard</Link>
               <a href="/api/auth/logout" style={{ display: 'block', padding: '10px 16px', color: '#ef4444', textDecoration: 'none', fontSize: '14px', fontWeight: '500', background: 'rgba(239, 68, 68, 0.05)' }}>🚪 Abmelden</a>
             </div>
 
-            {/* Reines CSS-Hover für das Dropdown (ohne styled-jsx Build-Fehler) */}
             <style>{`
               .dropdown-wrapper:hover .dropdown-content {
                 display: block !important;
