@@ -22,19 +22,7 @@ export default async function Navbar() {
     : 'https://cdn.discordapp.com/embed/avatars/0.png';
 
   return (
-    <nav className="navbar" style={{ 
-      display: 'flex', 
-      justifyContent: 'space-between', 
-      alignItems: 'center', 
-      padding: '0 2rem', 
-      background: '#0f172a', 
-      borderBottom: '1px solid #1e293b', 
-      height: '70px',
-      position: 'sticky',
-      top: 0,
-      zIndex: 1000,
-      fontFamily: 'sans-serif'
-    }}>
+    <nav className="navbar">
       <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: '#fff', fontWeight: 'bold' }}>
         <div style={{ 
           width: '38px', 
@@ -70,43 +58,50 @@ export default async function Navbar() {
               alignItems: 'center', 
               gap: '10px', 
               background: '#1e293b', 
-              padding: '6px 14px', 
+              padding: '6px 16px', 
               borderRadius: '30px', 
               border: '1px solid #334155', 
-              cursor: 'pointer' 
+              cursor: 'pointer',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
             }}>
-              <img src={avatarUrl} alt="Avatar" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
-              <span style={{ color: '#f8fafc', fontSize: '14px', fontWeight: '500' }}>{user.username}</span>
+              <img src={avatarUrl} alt="Avatar" style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #38bdf8' }} />
+              <span style={{ color: '#f8fafc', fontSize: '14px', fontWeight: '600' }}>{user.username}</span>
               <span style={{ fontSize: '10px', color: '#94a3b8' }}>▼</span>
             </div>
             
+            {/* Neues verfeinertes Profil-Dropdown-Menü */}
             <div className="dropdown-content" style={{
               position: 'absolute',
               right: 0,
               top: '100% - 2px',
               background: '#0f172a',
               border: '1px solid #334155',
-              borderRadius: '12px',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.7)',
+              borderRadius: '16px',
+              boxShadow: '0 25px 50px rgba(0,0,0,0.8)',
               overflow: 'hidden',
-              minWidth: '220px',
+              minWidth: '240px',
               display: 'none',
               zIndex: 100
             }}>
-              <div style={{ padding: '12px 16px 6px 16px', fontSize: '11px', textTransform: 'uppercase', color: '#64748b', fontWeight: '700', letterSpacing: '0.5px' }}>
-                Bereiche & Navigation
+              <div style={{ padding: '16px 18px 10px 18px', borderBottom: '1px solid #1e293b', background: 'rgba(30, 41, 59, 0.4)' }}>
+                <span style={{ display: 'block', fontSize: '12px', color: '#94a3b8' }}>Angemeldet als</span>
+                <span style={{ display: 'block', fontSize: '14px', color: '#fff', fontWeight: '700', marginTop: '2px' }}>{user.global_name || user.username}</span>
               </div>
-              <Link href="/entstoerungsdienst" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>⚡ Entstörungsdienst</Link>
-              <Link href="/fuehrungsebene" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>🏢 Führungsebene</Link>
-              <Link href="/personal" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>👥 Personalabteilung</Link>
-              <Link href="/ausbilder" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>🎓 Ausbilder</Link>
-              <Link href="/mitarbeiter" style={{ display: 'block', padding: '10px 16px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px', borderBottom: '1px solid #1e293b' }}>🛡️ Mitarbeiter</Link>
+
+              <div style={{ padding: '12px 18px 6px 18px', fontSize: '11px', textTransform: 'uppercase', color: '#64748b', fontWeight: '700', letterSpacing: '0.5px' }}>
+                Unternehmensbereiche
+              </div>
+              <Link href="/entstoerungsdienst" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>⚡ Entstörungsdienst</Link>
+              <Link href="/fuehrungsebene" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>🏢 Führungsebene</Link>
+              <Link href="/personal" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>👥 Personalabteilung</Link>
+              <Link href="/ausbilder" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>🎓 Ausbilder</Link>
+              <Link href="/mitarbeiter" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px', borderBottom: '1px solid #1e293b' }}>🛡️ Mitarbeiter</Link>
               
-              <div style={{ padding: '12px 16px 6px 16px', fontSize: '11px', textTransform: 'uppercase', color: '#64748b', fontWeight: '700', letterSpacing: '0.5px' }}>
-                Account
+              <div style={{ padding: '12px 18px 6px 18px', fontSize: '11px', textTransform: 'uppercase', color: '#64748b', fontWeight: '700', letterSpacing: '0.5px' }}>
+                Account-Verwaltung
               </div>
-              <Link href="/dashboard" style={{ display: 'block', padding: '10px 16px', color: '#38bdf8', textDecoration: 'none', fontSize: '14px', fontWeight: '500' }}>📊 Dashboard</Link>
-              <a href="/api/auth/logout" style={{ display: 'block', padding: '10px 16px', color: '#ef4444', textDecoration: 'none', fontSize: '14px', fontWeight: '500', background: 'rgba(239, 68, 68, 0.05)' }}>🚪 Abmelden</a>
+              <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', color: '#38bdf8', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>📊 Mitarbeiter-Dashboard</Link>
+              <a href="/api/auth/logout" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 18px', color: '#ef4444', textDecoration: 'none', fontSize: '14px', fontWeight: '600', background: 'rgba(239, 68, 68, 0.08)', borderTop: '1px solid #1e293b' }}>🚪 Abmelden</a>
             </div>
 
             <style>{`
@@ -119,12 +114,13 @@ export default async function Navbar() {
           <a href="/auth/discord" style={{
             background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
             color: '#fff',
-            padding: '8px 18px',
-            borderRadius: '8px',
+            padding: '10px 22px',
+            borderRadius: '12px',
             textDecoration: 'none',
             fontWeight: '600',
             fontSize: '14px',
-            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)'
+            boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)',
+            transition: 'transform 0.2s'
           }}>
             Discord Anmelden
           </a>
