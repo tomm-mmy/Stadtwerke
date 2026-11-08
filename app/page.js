@@ -6,7 +6,7 @@ import { Zap, Building2, Users, GraduationCap, Shield, ArrowRight } from 'lucide
 export default async function Home() {
   const cookieStore = await cookies();
   const userCookie = cookieStore.get('discord_user');
-  const isLoggedIn = !!userCookie; 
+  const isLoggedIn = !!userCookie;
 
   return (
     <main className="page-container">
