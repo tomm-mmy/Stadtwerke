@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   FileText, 
   CheckCircle2, 
@@ -15,6 +15,16 @@ import BerichtModal from './modals/BerichtModal';
 export default function ClientMitarbeiter({ user }) {
   const [activeTab, setActiveTab] = useState('auftraege'); 
   const [activeModal, setActiveModal] = useState(null); // 'dienstplan' oder 'bericht'
+  const [auftraege, setAuftraege] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/auftraege')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) setAuftraege(data.auftraege);
+      })
+      .catch(err => console.error(err));
+  }, []);
 
   return (
     <main className="page-container">
@@ -158,10 +168,23 @@ export default function ClientMitarbeiter({ user }) {
       {activeTab === 'auftraege' && (
         <div style={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: '20px', padding: '1.75rem' }}>
           <h2 style={{ margin: '0 0 4px 0', fontSize: '1.4rem' }}>Operative Arbeitsaufträge</h2>
-          <p style={{ margin: '0 0 1.5rem 0', color: '#94a3b8', fontSize: '0.9rem' }}>Aktuelle Wartungs- und Entstörungsaufträge im Netzgebiet.</p>
-          <div style={{ padding: '2rem', textAlign: 'center', border: '1px dashed #1e293b', borderRadius: '12px', color: '#94a3b8' }}>
-            Derzeit liegen keine offenen Störungsmeldungen vor. Das Versorgungsnetz läuft stabil.
-          </div>
+          <p style={{ margin: '0 0 1.5rem 0', color: '#94a3b8', fontSize: '0.9rem' }}>Echte Live-Aufträge der Führungsebene für das Netzgebiet.</p>
+          
+          {auftraege.length === 0 ? (
+            <div style={{ padding: '2rem', textAlign: 'center', border: '1px dashed #1e293b', borderRadius: '12px', color: '#94a3b8' }}>
+              Derzeit liegen keine offenen Störungsmeldungen vor. Das Versorgungsnetz läuft stabil.
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              {auftraege.map((a) => (
+                <div key={a.id} style={{ background: '#070b14', border: '1px solid #1e293b', padding: '1.25rem', borderRadius: '12px' }}>
+                  <div style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '1.05rem' }}>{a.titel}</div>
+                  <div style={{ color: '#f8fafc', fontSize: '0.95rem', margin: '6px 0' }}>{a.details}</div>
+                  <div style={{ color: '#94a3b8', fontSize: '0.8rem' }}>Eingestellt von: <strong>{a.erstelltVon}</strong> um {a.zeit}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
