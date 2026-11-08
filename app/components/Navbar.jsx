@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { cookies } from 'next/headers';
+import { Home, LayoutDashboard, LogOut, ChevronDown, Shield, Zap, Building2, Users, GraduationCap } from 'lucide-react';
 
 export default async function Navbar() {
   const cookieStore = await cookies();
@@ -23,18 +24,8 @@ export default async function Navbar() {
 
   return (
     <nav className="navbar">
-      <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: '#fff', fontWeight: 'bold' }}>
-        <div style={{ 
-          width: '38px', 
-          height: '38px', 
-          borderRadius: '50%', 
-          overflow: 'hidden', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          border: '1px solid #334155',
-          backgroundColor: '#1e293b'
-        }}>
+      <Link href="/" className="nav-brand-link">
+        <div className="nav-logo-wrapper">
           <Image 
             src="/stadtwerkeprofdilbild.webp" 
             alt="Logo" 
@@ -43,84 +34,45 @@ export default async function Navbar() {
             style={{ objectFit: 'cover' }}
           />
         </div>
-        <span>Stadtwerke Neubrücken</span>
+        <span className="nav-brand-text">Stadtwerke Neubrücken</span>
       </Link>
       
-      <ul style={{ display: 'flex', listStyle: 'none', gap: '25px', margin: 0, padding: 0, alignItems: 'center' }}>
-        <li><Link href="/" style={{ color: '#f8fafc', textDecoration: 'none', fontWeight: '500', fontSize: '15px' }}>Startseite</Link></li>
-      </ul>
+      <div className="nav-menu-links">
+        <Link href="/" className="nav-home-btn">
+          <Home size={16} />
+          <span>Startseite</span>
+        </Link>
+      </div>
 
       <div>
         {user ? (
-          <div className="dropdown-wrapper" style={{ position: 'relative', display: 'inline-block', paddingBottom: '10px', marginBottom: '-10px' }}>
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '10px', 
-              background: '#1e293b', 
-              padding: '6px 16px', 
-              borderRadius: '30px', 
-              border: '1px solid #334155', 
-              cursor: 'pointer',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
-            }}>
-              <img src={avatarUrl} alt="Avatar" style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #38bdf8' }} />
-              <span style={{ color: '#f8fafc', fontSize: '14px', fontWeight: '600' }}>{user.username}</span>
-              <span style={{ fontSize: '10px', color: '#94a3b8' }}>▼</span>
+          <div className="dropdown-wrapper">
+            <div className="user-pill">
+              <img src={avatarUrl} alt="Avatar" className="user-avatar" />
+              <span className="user-name">{user.username}</span>
+              <ChevronDown size={14} className="dropdown-arrow" />
             </div>
             
-            <div className="dropdown-content" style={{
-              position: 'absolute',
-              right: 0,
-              top: '100% - 2px',
-              background: '#0f172a',
-              border: '1px solid #334155',
-              borderRadius: '16px',
-              boxShadow: '0 25px 50px rgba(0,0,0,0.8)',
-              overflow: 'hidden',
-              minWidth: '240px',
-              display: 'none',
-              zIndex: 100
-            }}>
-              <div style={{ padding: '16px 18px 10px 18px', borderBottom: '1px solid #1e293b', background: 'rgba(30, 41, 59, 0.4)' }}>
-                <span style={{ display: 'block', fontSize: '12px', color: '#94a3b8' }}>Angemeldet als</span>
-                <span style={{ display: 'block', fontSize: '14px', color: '#fff', fontWeight: '700', marginTop: '2px' }}>{user.global_name || user.username}</span>
+            <div className="dropdown-content">
+              <div className="dropdown-header">
+                <span className="dropdown-subtitle">Angemeldet als</span>
+                <span className="dropdown-title">{user.global_name || user.username}</span>
               </div>
 
-              <div style={{ padding: '12px 18px 6px 18px', fontSize: '11px', textTransform: 'uppercase', color: '#64748b', fontWeight: '700', letterSpacing: '0.5px' }}>
-                Unternehmensbereiche
-              </div>
-              <Link href="/entstoerungsdienst" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>⚡ Entstörungsdienst</Link>
-              <Link href="/fuehrungsebene" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>🏢 Führungsebene</Link>
-              <Link href="/personal" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>👥 Personalabteilung</Link>
-              <Link href="/ausbilder" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px' }}>🎓 Ausbilder</Link>
-              <Link href="/mitarbeiter" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', color: '#cbd5e1', textDecoration: 'none', fontSize: '14px', borderBottom: '1px solid #1e293b' }}>🛡️ Mitarbeiter</Link>
+              <div className="dropdown-section-title">Unternehmensbereiche</div>
+              <Link href="/entstoerungsdienst" className="dropdown-item"><Zap size={16} className="text-cyan" /> Entstörungsdienst</Link>
+              <Link href="/fuehrungsebene" className="dropdown-item"><Building2 size={16} className="text-indigo" /> Führungsebene</Link>
+              <Link href="/personal" className="dropdown-item"><Users size={16} className="text-emerald" /> Personalabteilung</Link>
+              <Link href="/ausbilder" className="dropdown-item"><GraduationCap size={16} className="text-amber" /> Ausbilder</Link>
+              <Link href="/mitarbeiter" className="dropdown-item border-bot"><Shield size={16} className="text-blue" /> Mitarbeiter</Link>
               
-              <div style={{ padding: '12px 18px 6px 18px', fontSize: '11px', textTransform: 'uppercase', color: '#64748b', fontWeight: '700', letterSpacing: '0.5px' }}>
-                Account-Verwaltung
-              </div>
-              <Link href="/dashboard" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 18px', color: '#38bdf8', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>📊 Mitarbeiter-Dashboard</Link>
-              <a href="/api/auth/logout" style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 18px', color: '#ef4444', textDecoration: 'none', fontSize: '14px', fontWeight: '600', background: 'rgba(239, 68, 68, 0.08)', borderTop: '1px solid #1e293b' }}>🚪 Abmelden</a>
+              <div className="dropdown-section-title">Verwaltung</div>
+              <Link href="/dashboard" className="dropdown-item highlight"><LayoutDashboard size={16} /> Mitarbeiter-Dashboard</Link>
+              <a href="/api/auth/logout" className="dropdown-item logout"><LogOut size={16} /> Abmelden</a>
             </div>
-
-            <style>{`
-              .dropdown-wrapper:hover .dropdown-content {
-                display: block !important;
-              }
-            `}</style>
           </div>
         ) : (
-          <a href="/auth/discord" style={{
-            background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
-            color: '#fff',
-            padding: '10px 22px',
-            borderRadius: '12px',
-            textDecoration: 'none',
-            fontWeight: '600',
-            fontSize: '14px',
-            boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)',
-            transition: 'transform 0.2s'
-          }}>
+          <a href="/auth/discord" className="btn-discord-login">
             Discord Anmelden
           </a>
         )}
