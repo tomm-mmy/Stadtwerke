@@ -6,7 +6,8 @@ import {
   CheckCircle2, 
   Calendar, 
   Clock, 
-  Users
+  Users,
+  Wrench
 } from 'lucide-react';
 import DienstplanSection from './components/DienstplanSection';
 import DienstplanModal from './modals/DienstplanModal';
@@ -36,33 +37,57 @@ export default function ClientMitarbeiter({ user }) {
         </p>
       </div>
 
-      {/* Schnellzugriff / Management Aktions-Buttons (Nur Schicht & Bericht) */}
+      {/* Schnellzugriff / Management Aktions-Buttons */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem', marginBottom: '2.5rem' }}>
-        <button 
-          onClick={() => setActiveModal('dienstplan')}
+        
+        {/* GESPERRTE CARD: Schichtdienst eintragen (Coming Soon) */}
+        <div 
           style={{
-            background: 'linear-gradient(160deg, #0f172a 0%, #0b1120 100%)',
-            border: '1px solid #1e293b',
+            background: 'linear-gradient(160deg, #090d16 0%, #070b14 100%)',
+            border: '1px dashed #1e293b',
             borderRadius: '16px',
             padding: '1.25rem',
             textAlign: 'left',
-            cursor: 'pointer',
-            color: '#fff',
+            color: '#64748b',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
+            opacity: 0.65,
+            cursor: 'not-allowed',
+            position: 'relative',
+            overflow: 'hidden'
           }}
         >
+          {/* Badge oben rechts */}
+          <span style={{
+            position: 'absolute',
+            top: '1rem',
+            right: '1rem',
+            background: 'rgba(245, 158, 11, 0.15',
+            color: '#fbbf24',
+            border: '1px solid rgba(245, 158, 11, 0.3)',
+            fontSize: '0.7rem',
+            fontWeight: '700',
+            padding: '3px 8px',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px'
+          }}>
+            <Wrench size={12} /> Demnächst
+          </span>
+
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.75rem' }}>
-            <div style={{ background: 'rgba(56, 189, 248, 0.12)', padding: '10px', borderRadius: '10px', color: '#38bdf8' }}>
+            <div style={{ background: 'rgba(100, 116, 139, 0.12)', padding: '10px', borderRadius: '10px', color: '#64748b' }}>
               <Users size={20} />
             </div>
-            <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Schichtdienst eintragen</h3>
+            <h3 style={{ margin: 0, fontSize: '1.1rem', color: '#94a3b8' }}>Schichtdienst eintragen</h3>
           </div>
-          <p style={{ margin: '0 0 1rem 0', color: '#94a3b8', fontSize: '0.85rem' }}>Trage deine Bereitschaftszeit ein (Log an Kanal 1568953444146876488).</p>
-          <span style={{ color: '#38bdf8', fontSize: '0.85rem', fontWeight: '600' }}>Schicht erfassen &rarr;</span>
-        </button>
+          <p style={{ margin: '0 0 1rem 0', color: '#475569', fontSize: '0.85rem' }}>Trage deine Bereitschaftszeit ein (Log an Kanal 1568953444146876488).</p>
+          <span style={{ color: '#475569', fontSize: '0.85rem', fontWeight: '600' }}>In Entwicklung...</span>
+        </div>
 
+        {/* AKTIVE CARD: Einsatzbericht erfassen */}
         <button 
           onClick={() => setActiveModal('bericht')}
           style={{
