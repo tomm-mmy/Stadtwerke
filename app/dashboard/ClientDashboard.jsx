@@ -2,6 +2,20 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { 
+  ArrowLeft, 
+  ShieldCheck, 
+  KeyRound, 
+  Eye, 
+  EyeOff, 
+  Calendar, 
+  Globe, 
+  ShieldAlert, 
+  LogOut, 
+  CheckCircle2, 
+  Mail, 
+  User 
+} from 'lucide-react';
 
 export default function ClientDashboard({ user }) {
   const [revealed, setRevealed] = useState({
@@ -32,8 +46,8 @@ export default function ClientDashboard({ user }) {
             </h1>
             <p style={{ color: '#94a3b8', fontSize: '14px', margin: '6px 0 0 0' }}>Stadtwerke Neubrücken – Server ID: 1490307263909335102</p>
           </div>
-          <Link href="/" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', background: '#1e293b', padding: '10px 20px', borderRadius: '12px', border: '1px solid #334155' }}>
-            ← Zur Startseite
+          <Link href="/" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px', background: '#1e293b', padding: '10px 20px', borderRadius: '12px', border: '1px solid #334155', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <ArrowLeft size={16} /> Zur Startseite
           </Link>
         </div>
 
@@ -47,18 +61,18 @@ export default function ClientDashboard({ user }) {
                 {user.nickname ? `Server-Nickname: ${user.nickname}` : `@${user.username}`}
               </p>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                <span style={{ background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
-                  ● Server-Mitglied verifiziert
+                <span style={{ background: 'rgba(34, 197, 94, 0.15)', color: '#22c55e', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', border: '1px solid rgba(34, 197, 94, 0.3)', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <CheckCircle2 size={14} /> Server-Mitglied verifiziert
                 </span>
-                <span style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
-                  🛡️ Ränge aktiv ({user.roles?.length || 0} zugewiesen)
+                <span style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', padding: '6px 14px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', border: '1px solid rgba(56, 189, 248, 0.3)', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  <ShieldCheck size={14} /> Ränge aktiv ({user.roles?.length || 0} zugewiesen)
                 </span>
               </div>
             </div>
           </div>
 
           <h3 style={{ fontSize: '1.25rem', marginBottom: '15px', color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            🔐 Sensible Account-Daten & Sicherheit
+            <KeyRound size={20} className="text-cyan" style={{ color: '#38bdf8' }} /> Sensible Account-Daten & Sicherheit
           </h3>
           <p style={{ color: '#94a3b8', fontSize: '13.5px', marginBottom: '25px', lineHeight: '1.5' }}>
             Deine E-Mail und Discord-ID sind standardmäßig unscharf gestellt. Klicke auf die jeweilige Box, um sie aufzudecken oder wieder zu zensieren.
@@ -71,7 +85,9 @@ export default function ClientDashboard({ user }) {
               style={{ background: '#161e2e', padding: '20px 25px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', border: '1px solid #283548', transition: 'border-color 0.2s' }}
             >
               <div>
-                <span style={{ display: 'block', fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>DISCORD E-MAIL-ADRESSE</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>
+                  <Mail size={12} /> DISCORD E-MAIL-ADRESSE
+                </span>
                 <span style={{ 
                   fontSize: '17px', 
                   fontFamily: 'monospace', 
@@ -83,8 +99,9 @@ export default function ClientDashboard({ user }) {
                   {user.email}
                 </span>
               </div>
-              <span style={{ fontSize: '12px', background: '#0f172a', padding: '8px 14px', borderRadius: '10px', color: '#38bdf8', border: '1px solid #334155', fontWeight: '600' }}>
-                {revealed.email ? '👁️ Verstecken' : '🔒 Aufdecken'}
+              <span style={{ fontSize: '12px', background: '#0f172a', padding: '8px 14px', borderRadius: '10px', color: '#38bdf8', border: '1px solid #334155', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                {revealed.email ? <EyeOff size={14} /> : <Eye size={14} />}
+                {revealed.email ? 'Verstecken' : 'Aufdecken'}
               </span>
             </div>
 
@@ -93,7 +110,9 @@ export default function ClientDashboard({ user }) {
               style={{ background: '#161e2e', padding: '20px 25px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', border: '1px solid #283548', transition: 'border-color 0.2s' }}
             >
               <div>
-                <span style={{ display: 'block', fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>DISCORD USER ID</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>
+                  <User size={12} /> DISCORD USER ID
+                </span>
                 <span style={{ 
                   fontSize: '17px', 
                   fontFamily: 'monospace', 
@@ -105,33 +124,40 @@ export default function ClientDashboard({ user }) {
                   {user.id}
                 </span>
               </div>
-              <span style={{ fontSize: '12px', background: '#0f172a', padding: '8px 14px', borderRadius: '10px', color: '#38bdf8', border: '1px solid #334155', fontWeight: '600' }}>
-                {revealed.id ? '👁️ Verstecken' : '🔒 Aufdecken'}
+              <span style={{ fontSize: '12px', background: '#0f172a', padding: '8px 14px', borderRadius: '10px', color: '#38bdf8', border: '1px solid #334155', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                {revealed.id ? <EyeOff size={14} /> : <Eye size={14} />}
+                {revealed.id ? 'Verstecken' : 'Aufdecken'}
               </span>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px', marginTop: '10px' }}>
               <div style={{ background: '#161e2e', padding: '20px', borderRadius: '16px', border: '1px solid #283548' }}>
-                <span style={{ display: 'block', fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>SERVER-BEITRITT</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>
+                  <Calendar size={12} /> SERVER-BEITRITT
+                </span>
                 <span style={{ fontSize: '16px', color: '#f8fafc', fontWeight: '600' }}>{formattedJoinDate}</span>
               </div>
 
               <div style={{ background: '#161e2e', padding: '20px', borderRadius: '16px', border: '1px solid #283548' }}>
-                <span style={{ display: 'block', fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>SPRACHE / LOCALE</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>
+                  <Globe size={12} /> SPRACHE / LOCALE
+                </span>
                 <span style={{ fontSize: '16px', color: '#f8fafc', textTransform: 'uppercase', fontWeight: '600' }}>{user.locale}</span>
               </div>
 
               <div style={{ background: '#161e2e', padding: '20px', borderRadius: '16px', border: '1px solid #283548' }}>
-                <span style={{ display: 'block', fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>2-FAKTOR-SCHUTZ (MFA)</span>
-                <span style={{ fontSize: '16px', color: '#22c55e', fontWeight: '600' }}>{user.mfa_enabled}</span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#94a3b8', marginBottom: '6px', fontWeight: 'bold' }}>
+                  <ShieldAlert size={12} /> 2-FAKTOR-SCHUTZ (MFA)
+                </span>
+                <span style={{ fontSize: '16px', color: '#22c55e', fontWeight: '600' }}>{user.mfa_enabled ? 'Aktiviert' : 'Deaktiviert'}</span>
               </div>
             </div>
 
           </div>
 
           <div style={{ marginTop: '50px', display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid #1f2937', paddingTop: '30px' }}>
-            <a href="/api/auth/logout" style={{ background: '#ef4444', color: '#fff', padding: '14px 30px', borderRadius: '12px', textDecoration: 'none', fontWeight: '600', fontSize: '15px', boxShadow: '0 6px 20px rgba(239, 68, 68, 0.4)' }}>
-              🚪 Aus dem Account abmelden
+            <a href="/api/auth/logout" style={{ background: '#ef4444', color: '#fff', padding: '14px 30px', borderRadius: '12px', textDecoration: 'none', fontWeight: '600', fontSize: '15px', boxShadow: '0 6px 20px rgba(239, 68, 68, 0.4)', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+              <LogOut size={18} /> Aus dem Account abmelden
             </a>
           </div>
 
