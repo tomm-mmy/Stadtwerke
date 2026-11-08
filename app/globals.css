@@ -54,23 +54,36 @@ body {
 }
 
 .banner-container {
-  width: 100%;
-  max-width: 450px; /* Macht das Banner schmäler und kompakter */
-  margin: 0 auto 20px auto;
-  border-radius: 14px;
+  /* Kompakte Logo-Fläche statt eines überbreiten Banners */
+  width: fit-content;
+  max-width: min(360px, 100%);
+  margin: 0 auto 24px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  background: transparent;
+  background: rgba(15, 23, 42, 0.35);
   line-height: 0;
 }
 
 .banner-container img {
-  width: 100% !important;
-  height: auto !important;
-  max-height: 150px !important; /* Begrenzt die Höhe, alles bleibt perfekt lesbar */
-  object-fit: contain !important;
   display: block;
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 130px !important;
+  object-fit: contain !important;
+}
+
+@media (max-width: 600px) {
+  .banner-container {
+    max-width: min(280px, 100%);
+    margin-bottom: 20px;
+  }
+
+  .banner-container img {
+    max-height: 110px !important;
+  }
 }
 
 .hero-content {
