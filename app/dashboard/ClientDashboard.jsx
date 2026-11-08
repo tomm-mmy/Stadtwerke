@@ -96,7 +96,7 @@ export default function ClientDashboard({ user }) {
                   userSelect: revealed.email ? 'text' : 'none',
                   transition: 'filter 0.25s ease'
                 }}>
-                  {user.email}
+          Nicht verfügbar
                 </span>
               </div>
               <span style={{ fontSize: '12px', background: '#0f172a', padding: '8px 14px', borderRadius: '10px', color: '#38bdf8', border: '1px solid #334155', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
