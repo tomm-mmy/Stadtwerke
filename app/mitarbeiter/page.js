@@ -1,23 +1,16 @@
-import { cookies } from 'next/headers';
+import { getCurrentUser } from '../../lib/auth';
 import { redirect } from 'next/navigation';
 import { canAccessMitarbeiter } from './utils/checkPermissions';
 import ClientMitarbeiter from './ClientMitarbeiter';
+import { getMaintenanceState } from '../../lib/system-state';
+import NotfallLockout from '../components/NotfallLockout';
+import { canAccessFuehrung } from './utils/checkPermissions';
 
 export default async function MitarbeiterPage() {
-  const cookieStore = await cookies();
-  const userCookie = cookieStore.get('discord_user');
+  const user = await getCurrentUser();
+  if (!user) redirect('/unauthorized');
 
-
-  if (!userCookie) {
-    redirect('/unauthorized');
-  }
-
-  let user;
-  try {
-    user = JSON.parse(userCookie.value);
-  } catch (err) {
-    redirect('/unauthorized');
-  }
+  if (await getMaintenanceState() && !canAccessFuehrung(user)) return <NotfallLockout />;
 
   if (!canAccessMitarbeiter(user)) {
     redirect('/unauthorized');
