@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 import { 
   Zap, 
   Building2, 
@@ -7,13 +6,13 @@ import {
   GraduationCap, 
   Shield, 
   ArrowRight,
-  HelpCircle,
   Clock,
   Activity,
   CheckCircle2,
   PhoneCall,
   ShieldCheck
 } from 'lucide-react';
+import { cookies } from 'next/headers';
 
 export default async function Home() {
   const cookieStore = await cookies();
@@ -22,7 +21,7 @@ export default async function Home() {
 
   return (
     <main className="page-container">
-      {/* Hero Section ohne Bild-Banner */}
+      {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-badge">
           <Activity size={16} /> 24/7 Infrastruktur- & Versorgungsnetz Neubrücken
@@ -136,7 +135,7 @@ export default async function Home() {
             <div className="faq-body">
               <h3>Was ist der Entstörungsdienst?</h3>
               <p>
-                Der Entstörungsdienst ist unsere rund um die Uhr besetzte Notfalleinheit. Er rückt bei akuten Beschädigungen an Leitungen, Rohrbürsten, Gasaustritten, Stromausfällen oder Wasserrohrbrüchen im Stadtgebiet aus, um Gefahren abzuwehren und die Netzstabilität wiederherzustellen.
+                Der Entstörungsdienst ist unsere rund um die Uhr besetzte Notfalleinheit. Er rückt bei akuten Beschädigungen an Leitungen, Gasaustritten, Stromausfällen oder Wasserrohrbrüchen im Stadtgebiet aus, um Gefahren abzuwehren.
               </p>
             </div>
           </div>
@@ -146,7 +145,7 @@ export default async function Home() {
             <div className="faq-body">
               <h3>Wann kommen wir zum Einsatz?</h3>
               <p>
-                Bei Notfällen (z. B. Gasgeruch, Rohrbruch) rückt der Entstörungsdienst sofort aus und ist in der Regel innerhalb von 10 bis 20 Minuten vor Ort. Geplante Wartungs- oder Anschlussarbeiten finden regulär während unserer Dienstzeiten (Mo–Fr: 07:00 – 17:00 Uhr) statt.
+                Bei Notfällen rückt der Entstörungsdienst sofort aus und ist in der Regel innerhalb weniger Minuten vor Ort. Geplante Wartungs- und Anschlussarbeiten finden während unserer regulären Dienstzeiten statt.
               </p>
             </div>
           </div>
@@ -156,7 +155,7 @@ export default async function Home() {
             <div className="faq-body">
               <h3>Was bedeutet „Wir halten die Stadt am laufen“?</h3>
               <p>
-                Dieser Spruch steht für unsere Verantwortung gegenüber allen Bürgern in Neubrücken. Ob Strom im Haushalt, fließendes Trinkwasser, funktionierende Ampelanlagen oder Wärme im Winter – ohne die Arbeit der Stadtwerke würde das öffentliche und private Leben stillstehen.
+                Dieser Slogan steht für unsere Verantwortung gegenüber allen Bürgern. Ob Strom, fließendes Trinkwasser oder funktionierende Infrastruktur  ohne die Stadtwerke würde das öffentliche Leben stillstehen.
               </p>
             </div>
           </div>
@@ -166,7 +165,7 @@ export default async function Home() {
             <div className="faq-body">
               <h3>Wie melde ich eine Störung?</h3>
               <p>
-                Akute Störungen im öffentlichen Netz können direkt über unseren Discord-Support-Kanal oder telefonisch bei der Notfall-Leitstelle gemeldet werden. Bei Notfällen am eigenen Zähler schalten Sie bitte erst die Hauptsicherung oder den Haupthahn ab.
+                Störungen können ganz einfach <strong>ingame über das Handy</strong> oder direkt vor Ort durch eine <strong>Fahrt zu unserem Depot</strong> gemeldet werden! Unser Team kümmert sich umgehend darum.
               </p>
             </div>
           </div>
