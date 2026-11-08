@@ -27,7 +27,7 @@ export function canManageOperations(user) {
   ]);
 }
 
-// Zugriff auf die Führungsseite (Führung, Hauptleitung & Personalleitung)
+
 export function canAccessFuehrung(user) {
   return checkUserRole(user, [
     ROLES.FUEHRUNGSEBENE, 
@@ -36,8 +36,7 @@ export function canAccessFuehrung(user) {
   ]);
 }
 
-// Volle Notfallrechte (Site offline nehmen, User abmelden etc.) 
-// -> Neubrücken Hauptleitung (1522887379030118450) ist hier bewusst ausgeschlossen!
+
 export function isFullManagement(user) {
   return checkUserRole(user, [
     ROLES.FUEHRUNGSEBENE,
