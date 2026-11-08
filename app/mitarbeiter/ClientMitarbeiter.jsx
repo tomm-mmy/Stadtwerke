@@ -7,27 +7,15 @@ import {
   Calendar, 
   Plus, 
   Clock, 
-  Sliders, 
-  Radio, 
-  Users, 
-  X,
-  Info
+  Users
 } from 'lucide-react';
 import DienstplanSection from './components/DienstplanSection';
+import DienstplanModal from './modals/DienstplanModal';
+import BerichtModal from './modals/BerichtModal';
 
 export default function ClientMitarbeiter({ user }) {
-  const [activeTab, setActiveTab] = useState('auftraege'); // 'regelwerk', 'auftraege', 'meetings', 'dienstplan'
-  const [activeModal, setActiveModal] = useState(null); // 'auftrag', 'schranke', 'alarm'
-  const [successMsg, setSuccessMsg] = useState('');
-
-  const handleModalSubmit = (e) => {
-    e.preventDefault();
-    setSuccessMsg('Aktion erfolgreich übermittelt!');
-    setTimeout(() => {
-      setSuccessMsg('');
-      setActiveModal(null);
-    }, 1800);
-  };
+  const [activeTab, setActiveTab] = useState('auftraege'); 
+  const [activeModal, setActiveModal] = useState(null); // 'dienstplan' oder 'bericht'
 
   return (
     <main className="page-container">
@@ -37,6 +25,59 @@ export default function ClientMitarbeiter({ user }) {
         <p style={{ margin: 0, color: '#94a3b8' }}>
           Angemeldet als: <strong style={{ color: '#38bdf8' }}>{user?.username || 'Mitarbeiter'}</strong>
         </p>
+      </div>
+
+      {/* Schnellzugriff / Management Aktions-Buttons (Nur Schicht & Bericht) */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem', marginBottom: '2.5rem' }}>
+        <button 
+          onClick={() => setActiveModal('dienstplan')}
+          style={{
+            background: 'linear-gradient(160deg, #0f172a 0%, #0b1120 100%)',
+            border: '1px solid #1e293b',
+            borderRadius: '16px',
+            padding: '1.25rem',
+            textAlign: 'left',
+            cursor: 'pointer',
+            color: '#fff',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.75rem' }}>
+            <div style={{ background: 'rgba(56, 189, 248, 0.12)', padding: '10px', borderRadius: '10px', color: '#38bdf8' }}>
+              <Users size={20} />
+            </div>
+            <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Schichtdienst eintragen</h3>
+          </div>
+          <p style={{ margin: '0 0 1rem 0', color: '#94a3b8', fontSize: '0.85rem' }}>Trage deine Bereitschaftszeit ein (Log an Kanal 1568953444146876488).</p>
+          <span style={{ color: '#38bdf8', fontSize: '0.85rem', fontWeight: '600' }}>Schicht erfassen &rarr;</span>
+        </button>
+
+        <button 
+          onClick={() => setActiveModal('bericht')}
+          style={{
+            background: 'linear-gradient(160deg, #0f172a 0%, #0b1120 100%)',
+            border: '1px solid #1e293b',
+            borderRadius: '16px',
+            padding: '1.25rem',
+            textAlign: 'left',
+            cursor: 'pointer',
+            color: '#fff',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.75rem' }}>
+            <div style={{ background: 'rgba(34, 197, 94, 0.12)', padding: '10px', borderRadius: '10px', color: '#4ade80' }}>
+              <FileText size={20} />
+            </div>
+            <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Einsatzbericht erfassen</h3>
+          </div>
+          <p style={{ margin: '0 0 1rem 0', color: '#94a3b8', fontSize: '0.85rem' }}>Erstelle einen Bericht für die Führung (Post in Kanal 1568953171643072622).</p>
+          <span style={{ color: '#4ade80', fontSize: '0.85rem', fontWeight: '600' }}>Bericht schreiben &rarr;</span>
+        </button>
       </div>
 
       {/* Navigation Tabs */}
@@ -117,30 +158,8 @@ export default function ClientMitarbeiter({ user }) {
       {/* TAB CONTENT: AUFTRÄGE */}
       {activeTab === 'auftraege' && (
         <div style={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: '20px', padding: '1.75rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-            <div>
-              <h2 style={{ margin: '0 0 4px 0', fontSize: '1.4rem' }}>Operative Arbeitsaufträge</h2>
-              <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.9rem' }}>Aktuelle Wartungs- und Entstörungsaufträge im Netzgebiet.</p>
-            </div>
-            <button 
-              onClick={() => setActiveModal('auftrag')}
-              style={{
-                background: '#6366f1',
-                color: '#fff',
-                border: 'none',
-                padding: '10px 18px',
-                borderRadius: '12px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }}
-            >
-              <Plus size={18} /> Neuen Auftrag anlegen
-            </button>
-          </div>
-
+          <h2 style={{ margin: '0 0 4px 0', fontSize: '1.4rem' }}>Operative Arbeitsaufträge</h2>
+          <p style={{ margin: '0 0 1.5rem 0', color: '#94a3b8', fontSize: '0.9rem' }}>Aktuelle Wartungs- und Entstörungsaufträge im Netzgebiet.</p>
           <div style={{ padding: '2rem', textAlign: 'center', border: '1px dashed #1e293b', borderRadius: '12px', color: '#94a3b8' }}>
             Derzeit liegen keine offenen Störungsmeldungen vor. Das Versorgungsnetz läuft stabil.
           </div>
@@ -155,9 +174,8 @@ export default function ClientMitarbeiter({ user }) {
         <div style={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: '20px', padding: '1.75rem', color: '#94a3b8' }}>
           <h2 style={{ color: '#fff', marginTop: 0 }}>Dienstvorschrift & Sicherheitsbestimmungen</h2>
           <ul style={{ lineHeight: '1.8', paddingLeft: '1.2rem' }}>
-            <li>Bei Einsätzen im Netzgebiet ist stets PSA (Persönliche Schutzausrüstung) zu tragen.</li>
-            <li>Störungsmeldungen müssen unverzüglich im System protokolliert werden.</li>
-            <li>Fahrzeuge des Entstörungsdienstes sind nach Dienstende aufzutanken und zu überprüfen.</li>
+            <li>Bei Einsätzen im Netzgebiet ist stets PSA zu tragen.</li>
+            <li>Störungsmeldungen müssen im System protokolliert werden.</li>
           </ul>
         </div>
       )}
@@ -170,42 +188,9 @@ export default function ClientMitarbeiter({ user }) {
         </div>
       )}
 
-      {/* MODAL SYSTEM */}
-      {activeModal && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <button onClick={() => setActiveModal(null)} className="modal-close-btn"><X size={18} /></button>
-            
-            {successMsg ? (
-              <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
-                <CheckCircle2 size={44} color="#22c55e" style={{ margin: '0 auto 1rem auto' }} />
-                <h3 style={{ color: '#fff' }}>{successMsg}</h3>
-              </div>
-            ) : (
-              <div>
-                {activeModal === 'auftrag' && (
-                  <div>
-                    <h3 className="modal-title"><Plus size={20} color="#6366f1" /> Neuen Auftrag anlegen</h3>
-                    <p className="modal-desc">Erfassen Sie einen neuen Einsatz für den Entstörungsdienst.</p>
-                    <form onSubmit={handleModalSubmit} className="modal-form">
-                      <input type="text" placeholder="Einsatzort / Straße" required className="modal-input" />
-                      <select className="modal-input">
-                        <option>Priorität: Normal (Wartung)</option>
-                        <option>Priorität: Hoch (Rohrbruch/Stromausfall)</option>
-                        <option>Priorität: Dringend (Gasaustritt)</option>
-                      </select>
-                      <textarea rows={3} placeholder="Beschreibung der Störung..." required className="modal-input" style={{ resize: 'none' }} />
-                      <button type="submit" className="btn-discord-login" style={{ width: '100%', border: 'none', cursor: 'pointer' }}>
-                        Auftrag freigeben
-                      </button>
-                    </form>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Modals einbinden */}
+      <DienstplanModal isOpen={activeModal === 'dienstplan'} onClose={() => setActiveModal(null)} user={user} />
+      <BerichtModal isOpen={activeModal === 'bericht'} onClose={() => setActiveModal(null)} user={user} />
     </main>
   );
 }
