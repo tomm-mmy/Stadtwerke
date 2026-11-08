@@ -5,7 +5,6 @@ import {
   FileText, 
   CheckCircle2, 
   Calendar, 
-  Plus, 
   Clock, 
   Users
 } from 'lucide-react';
