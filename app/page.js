@@ -10,16 +10,16 @@ export default async function Home() {
   return (
     <main className="page-container">
       <div className="hero-section">
-        <div className="banner-container">
-          <Image 
-            src="/stadtwerkebannner.png" 
-            alt="Stadtwerke Neubrücken Banner" 
-            width={1000} 
-            height={300} 
-            priority
-            style={{ width: '100%', height: 'auto', maxHeight: '280px', objectFit: 'cover', borderRadius: '16px' }}
-          />
-        </div>
+ <div className="banner-container">
+  <Image 
+    src="/stadtwerkebannner.png" 
+    alt="Stadtwerke Neubrücken Banner" 
+    width={600} 
+    height={200} 
+    priority
+    style={{ width: '100%', height: 'auto', maxHeight: '200px', objectFit: 'contain' }}
+  />
+</div>
         
         <div className="hero-content">
           <h1>Stadtwerke Neubrücken</h1>
