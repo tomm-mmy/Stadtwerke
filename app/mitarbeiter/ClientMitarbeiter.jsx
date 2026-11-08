@@ -109,7 +109,7 @@ export default function ClientMitarbeiter({ user }) {
             </div>
             <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Einsatzbericht erfassen</h3>
           </div>
-          <p style={{ margin: '0 0 1rem 0', color: '#94a3b8', fontSize: '0.85rem' }}>Erstelle einen Bericht für die Führung (Post in Kanal 1568953171643072622).</p>
+          <p style={{ margin: '0 0 1rem 0', color: '#94a3b8', fontSize: '0.85rem' }}>Erstelle einen Bericht für die Führung .</p>
           <span style={{ color: '#4ade80', fontSize: '0.85rem', fontWeight: '600' }}>Bericht schreiben &rarr;</span>
         </button>
       </div>
