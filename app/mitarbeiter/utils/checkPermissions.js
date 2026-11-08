@@ -10,7 +10,6 @@ export const ROLES = {
   PERSONAL_LEITUNG: '1522887100343517286',
 };
 
-
 export function canAccessMitarbeiter(user) {
   return checkUserRole(user, [
     ROLES.MITARBEITER, 
@@ -20,11 +19,28 @@ export function canAccessMitarbeiter(user) {
   ]);
 }
 
-
 export function canManageOperations(user) {
   return checkUserRole(user, [
     ROLES.FUEHRUNGSEBENE, 
     ROLES.NEUBRUECKEN_LEITUNG, 
+    ROLES.PERSONAL_LEITUNG
+  ]);
+}
+
+// Zugriff auf die Führungsseite (Führung, Hauptleitung & Personalleitung)
+export function canAccessFuehrung(user) {
+  return checkUserRole(user, [
+    ROLES.FUEHRUNGSEBENE, 
+    ROLES.NEUBRUECKEN_LEITUNG, 
+    ROLES.PERSONAL_LEITUNG
+  ]);
+}
+
+// Volle Notfallrechte (Site offline nehmen, User abmelden etc.) 
+// -> Neubrücken Hauptleitung (1522887379030118450) ist hier bewusst ausgeschlossen!
+export function isFullManagement(user) {
+  return checkUserRole(user, [
+    ROLES.FUEHRUNGSEBENE,
     ROLES.PERSONAL_LEITUNG
   ]);
 }
