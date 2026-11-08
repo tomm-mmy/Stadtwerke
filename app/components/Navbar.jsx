@@ -1,23 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { cookies } from 'next/headers';
+import { getCurrentUser } from '../lib/auth';
 import { Home, LayoutDashboard, LogOut, ChevronDown, Shield, Zap, Building2, Users, GraduationCap } from 'lucide-react';
 
 export default async function Navbar() {
-  const cookieStore = await cookies();
-  const userCookie = cookieStore.get('discord_user');
-  
-  let user = null;
-  if (userCookie) {
-    try {
-      const rawValue = userCookie.value;
-      const decodedValue = rawValue.includes('%') ? decodeURIComponent(rawValue) : rawValue;
-      user = JSON.parse(decodedValue);
-    } catch (e) {
-      user = null;
-    }
-  }
-
+const user = await getCurrentUser();
   const avatarUrl = user?.avatar 
     ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`
     : 'https://cdn.discordapp.com/embed/avatars/0.png';
