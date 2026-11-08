@@ -15,23 +15,22 @@ export default function DienstplanModal({ isOpen, onClose, user }) {
 
  
     try {
-      await fetch('/api/discord/log-schicht', {
+      const response = await fetch('/api/discord/log-schicht', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          channelId: '1568953444146876488',
-          username: user?.username || 'Mitarbeiter',
           schicht: schicht
         })
       });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.error || 'Eintragung fehlgeschlagen.');
       setStatus('Erfolgreich in den Schicht-Log eingetragen!');
       setTimeout(() => {
         setStatus('');
         onClose();
       }, 1500);
     } catch (err) {
-      setStatus('Erfolgreich gespeichert!');
-      setTimeout(() => { setStatus(''); onClose(); }, 1500);
+      setStatus(err.message || 'Schicht konnte nicht eingetragen werden.');
     }
   };
 
