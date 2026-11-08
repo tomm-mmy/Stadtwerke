@@ -1,8 +1,20 @@
+import Link from 'next/link';
 import { cookies } from 'next/headers';
+import { 
+  Zap, 
+  Building2, 
+  Users, 
+  GraduationCap, 
+  Shield, 
+  ArrowRight,
+  Clock,
+  Activity,
+  PhoneCall,
+  ShieldCheck
+} from 'lucide-react';
 import NotfallBanner from './components/NotfallBanner';
 import NotfallLockout from './components/NotfallLockout';
 import { canAccessFuehrung } from './mitarbeiter/utils/checkPermissions';
-import { Zap, Droplet, Flame, Wifi, HelpCircle } from 'lucide-react';
 
 async function getSystemState() {
   try {
@@ -12,7 +24,7 @@ async function getSystemState() {
   }
 }
 
-export default async function HomePage() {
+export default async function Home() {
   const cookieStore = await cookies();
   const userCookie = cookieStore.get('discord_user');
   
@@ -26,17 +38,17 @@ export default async function HomePage() {
   const isMaintenance = await getSystemState();
   const isFuehrung = user ? canAccessFuehrung(user) : false;
 
-  // 1. Nicht eingeloggt + Notbetrieb -> Sofort roter Lockout-Bildschirm
+  // 1. Nicht eingeloggt + Notbetrieb -> Sofort roter Notfall-Bildschirm
   if (isMaintenance && !user) {
     return <NotfallLockout />;
   }
 
-  // 2. Eingeloggt als normaler User (keine Führung) während Notbetrieb -> Komplett gesperrt
+  // 2. Eingeloggt als normaler User (keine Führung) während Notbetrieb -> Ausgegraut & Gesperrt
   const isLockedForUser = isMaintenance && user && !isFuehrung;
 
   return (
     <main className="page-container">
-      {/* Notfall-Banner oben für alle eingeloggten User im Notbetrieb */}
+      {/* Red Banner oben bei Notbetrieb */}
       {isMaintenance && <NotfallBanner isFuehrung={isFuehrung} />}
 
       <div style={{
@@ -45,118 +57,150 @@ export default async function HomePage() {
         userSelect: isLockedForUser ? 'none' : 'auto',
         transition: 'opacity 0.3s ease'
       }}>
-        {/* Hero Section */}
-        <div className="hero-section">
-          <div className="hero-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            ⚡ 24/7 Infrastruktur- & Versorgungsnetz Neubrücken
+        {/* Hero Section ohne das alte grüne Badge */}
+        <section className="hero-section">
+          <div className="hero-badge">
+            <Activity size={16} /> 24/7 Infrastruktur- & Versorgungsnetz Neubrücken
           </div>
-          
-          <h1 style={{ fontSize: '2.5rem', margin: '1rem 0' }}>Stadtwerke Neubrücken</h1>
-          
-          <p style={{ color: '#94a3b8', maxWidth: '600px', margin: '0 auto 2rem auto', lineHeight: '1.6' }}>
+          <h1>Stadtwerke Neubrücken</h1>
+          <p className="hero-subtitle">
             Wir sichern die zuverlässige Versorgung mit Strom, Wasser, Gas und Glasfaser im gesamten Stadtgebiet. Rund um die Uhr für Neubrücken im Einsatz.
           </p>
 
-          {/* Statistik Cards unten */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap', marginTop: '2rem' }}>
-            <div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#38bdf8' }}>24/7</div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Entstörungsdienst</div>
+          {/* Quick Stats Grid */}
+          <div className="hero-stats">
+            <div className="stat-card">
+              <span className="stat-value">24/7</span>
+              <span className="stat-label">Entstörungsdienst</span>
             </div>
-            <div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#38bdf8' }}>&lt; 15 Min</div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Durchschn. Ausrückzeit</div>
+            <div className="stat-card">
+              <span className="stat-value">&lt; 15 Min</span>
+              <span className="stat-label">Durchschn. Ausrückzeit</span>
             </div>
-            <div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#38bdf8' }}>100%</div>
-              <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Versorgungssicherheit</div>
+            <div className="stat-card">
+              <span className="stat-value">100%</span>
+              <span className="stat-label">Versorgungssicherheit</span>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Fachbereiche / Cards Sektion */}
-        <div className="section-container">
+        {/* Internes Portal & Unternehmensbereiche */}
+        <section className="section-container">
           <div className="section-header">
-            <h2>Unsere Fachbereiche</h2>
-            <p>Zentrale Infrastruktur und operative Abteilungen im Stadtgebiet.</p>
+            <div>
+              <h2>Unternehmensbereiche</h2>
+              <p>Interne Verwaltungs- und Dienstbereiche für Mitarbeiter</p>
+            </div>
           </div>
 
           <div className="departments-grid">
-            <div className="dept-card">
-              <div>
-                <div className="dept-card-header">
-                  <div className="card-icon cyan"><Zap size={22} /></div>
-                  <span className="badge-alert">Aktiv</span>
-                </div>
-                <h3>Stromnetz</h3>
-                <p>Hoch- und Mittelspannungsversorgung, Umspannwerke und Netzwertung.</p>
+            <Link href="/entstoerungsdienst" className="dept-card">
+              <div className="dept-card-header">
+                <div className="card-icon cyan"><Zap size={20} /></div>
+                <span className="badge-alert">24/7 Aktiv</span>
               </div>
-              <span className="dept-link">Netzstatus prüfen &rarr;</span>
-            </div>
+              <h3>Entstörungsdienst</h3>
+              <p>Bereitschaftsdienst, Schadensmeldungen und Einsätze im Netzgebiet.</p>
+              <div className="dept-link">
+                <span>Bereich ansehen</span> <ArrowRight size={14} />
+              </div>
+            </Link>
 
-            <div className="dept-card">
-              <div>
-                <div className="dept-card-header">
-                  <div className="card-icon blue"><Droplet size={22} /></div>
-                  <span className="badge-alert">Stabil</span>
-                </div>
-                <h3>Wasserversorgung</h3>
-                <p>Frischwasser, Pumpwerke, Druckprüfung und Rohrnetzüberwachung.</p>
+            <Link href="/fuehrungsebene" className="dept-card">
+              <div className="dept-card-header">
+                <div className="card-icon purple"><Building2 size={20} /></div>
               </div>
-              <span className="dept-link">Messwerte ansehen &rarr;</span>
-            </div>
+              <h3>Führungsebene</h3>
+              <p>Geschäftsführung, strategische Leitung und administrative Freigaben.</p>
+              <div className="dept-link">
+                <span>Bereich ansehen</span> <ArrowRight size={14} />
+              </div>
+            </Link>
 
-            <div className="dept-card">
-              <div>
-                <div className="dept-card-header">
-                  <div className="card-icon purple"><Flame size={22} /></div>
-                  <span className="badge-alert">Reguliert</span>
-                </div>
-                <h3>Gasversorgung</h3>
-                <p>Gasnetz-Sicherheit, Hausanschlüsse und Druckregelanlagen.</p>
+            <Link href="/personal" className="dept-card">
+              <div className="dept-card-header">
+                <div className="card-icon blue"><Users size={20} /></div>
               </div>
-              <span className="dept-link">Sicherheitsrichtlinien &rarr;</span>
-            </div>
+              <h3>Personalabteilung</h3>
+              <p>HR-Management, Richtlinien, Bewerbungsprozesse und Betreuung.</p>
+              <div className="dept-link">
+                <span>Bereich ansehen</span> <ArrowRight size={14} />
+              </div>
+            </Link>
 
-            <div className="dept-card">
-              <div>
-                <div className="dept-card-header">
-                  <div className="card-icon green"><Wifi size={22} /></div>
-                  <span className="badge-alert">Highspeed</span>
-                </div>
-                <h3>Glasfaser / IT</h3>
-                <p>Breitbandausbau, Backbone-Anbindung und Rechenzentrum.</p>
+            <Link href="/ausbilder" className="dept-card">
+              <div className="dept-card-header">
+                <div className="card-icon green"><GraduationCap size={20} /></div>
               </div>
-              <span className="dept-link">Ausbaustatus &rarr;</span>
-            </div>
+              <h3>Ausbildung & Lehre</h3>
+              <p>Einarbeitung, Schulungsunterlagen und Ausbildungsfortschritt.</p>
+              <div className="dept-link">
+                <span>Bereich ansehen</span> <ArrowRight size={14} />
+              </div>
+            </Link>
+
+            <Link href="/mitarbeiter" className="dept-card">
+              <div className="dept-card-header">
+                <div className="card-icon slate"><Shield size={20} /></div>
+              </div>
+              <h3>Mitarbeiter-Portal</h3>
+              <p>Dienstpläne, interne Berichte und Ankündigungen fürs Kollegium.</p>
+              <div className="dept-link">
+                <span>Bereich ansehen</span> <ArrowRight size={14} />
+              </div>
+            </Link>
           </div>
-        </div>
+        </section>
 
-        {/* QA / FAQ Sektion */}
-        <div className="section-container">
-          <div className="section-header">
-            <h2>Häufig gestellte Fragen (FAQ)</h2>
-            <p>Wichtige Informationen rund um den Betrieb und Notfallmaßnahmen.</p>
+        {/* Bürger-Infobereich / FAQ */}
+        <section className="section-container info-section">
+          <div className="section-header center">
+            <h2>Häufige Fragen & Bürgerinformationen</h2>
+            <p>Wichtige Fakten rund um den Service der Stadtwerke Neubrücken</p>
           </div>
 
           <div className="faq-grid">
             <div className="faq-card">
-              <div className="faq-icon"><HelpCircle size={20} /></div>
+              <div className="faq-icon"><Zap size={22} /></div>
               <div className="faq-body">
-                <h3>Was tun bei einem Rohrbruch oder Stromausfall?</h3>
-                <p>Sofort den 24/7-Entstörungsdienst alarmieren und die entsprechende Abteilung über das Mitarbeiterportal oder die Leitstelle informieren.</p>
+                <h3>Was ist der Entstörungsdienst?</h3>
+                <p>
+                  Der Entstörungsdienst ist unsere rund um die Uhr besetzte Notfalleinheit. Er rückt bei akuten Beschädigungen an Leitungen, Rohrbürsten, Gasaustritten, Stromausfällen oder Wasserrohrbrüchen im Stadtgebiet aus, um Gefahren abzuwehren und die Netzstabilität wiederherzustellen.
+                </p>
               </div>
             </div>
 
             <div className="faq-card">
-              <div className="faq-icon"><HelpCircle size={20} /></div>
+              <div className="faq-icon"><Clock size={22} /></div>
               <div className="faq-body">
-                <h3>Wie erhalte ich Zugriff auf das Mitarbeiterportal?</h3>
-                <p>Der Zugriff erfordert eine verifizierte Discord-Authentifizierung und die Zuweisung der entsprechenden Team-Berechtigung durch die Führungsebene.</p>
+                <h3>Wann kommen wir zum Einsatz?</h3>
+                <p>
+                  Bei Notfällen (z. B. Gasgeruch, Rohrbruch) rückt der Entstörungsdienst sofort aus und ist in der Regel innerhalb von 10 bis 20 Minuten vor Ort. Geplante Wartungs- oder Anschlussarbeiten finden regulär während unserer Dienstzeiten (Mo–Fr: 07:00 – 17:00 Uhr) statt.
+                </p>
+              </div>
+            </div>
+
+            <div className="faq-card">
+              <div className="faq-icon"><ShieldCheck size={22} /></div>
+              <div className="faq-body">
+                <h3>Was bedeutet „Wir halten die Stadt am laufen“?</h3>
+                <p>
+                  Dieser Spruch steht für unsere Verantwortung gegenüber allen Bürgern in Neubrücken. Ob Strom im Haushalt, fließendes Trinkwasser, funktionierende Ampelanlagen oder Wärme im Winter – ohne die Arbeit der Stadtwerke würde das öffentliche und private Leben stillstehen.
+                </p>
+              </div>
+            </div>
+
+            <div className="faq-card">
+              <div className="faq-icon"><PhoneCall size={22} /></div>
+              <div className="faq-body">
+                <h3>Wie melde ich eine Störung?</h3>
+                <p>
+                  Akute Störungen im öffentlichen Netz können direkt über unseren Discord-Support-Kanal oder telefonisch bei der Notfall-Leitstelle gemeldet werden. Bei Notfällen am eigenen Zähler schalten Sie bitte erst die Hauptsicherung oder den Haupthahn ab.
+                </p>
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </main>
   );
