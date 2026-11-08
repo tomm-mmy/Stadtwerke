@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { getCurrentUser } from '../lib/auth';
+import { getCurrentUser } from '../../lib/auth';
 import { Home, LayoutDashboard, LogOut, ChevronDown, Shield, Zap, Building2, Users, GraduationCap } from 'lucide-react';
 
 export default async function Navbar() {
