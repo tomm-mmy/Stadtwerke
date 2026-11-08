@@ -55,21 +55,21 @@ body {
 
 .banner-container {
   width: 100%;
-  max-width: 800px; /* Breite des Banners anpassen */
-  margin: 0 auto 25px auto;
-  border-radius: 16px;
+  max-width: 450px; /* Macht das Banner schmäler und kompakter */
+  margin: 0 auto 20px auto;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: transparent;
-  line-height: 0; 
+  line-height: 0;
 }
 
 .banner-container img {
   width: 100% !important;
   height: auto !important;
-  max-height: none !important;
-  object-fit: contain !important; 
+  max-height: 150px !important; /* Begrenzt die Höhe, alles bleibt perfekt lesbar */
+  object-fit: contain !important;
   display: block;
 }
 
