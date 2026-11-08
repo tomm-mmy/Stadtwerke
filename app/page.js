@@ -38,26 +38,27 @@ export default async function Home() {
   const isMaintenance = await getSystemState();
   const isFuehrung = user ? canAccessFuehrung(user) : false;
 
-  // 1. Nicht eingeloggt + Notbetrieb -> Sofort roter Notfall-Bildschirm
+  // 1. Nicht eingeloggt + Notbetrieb -> Sofort roter Notfall-Bildschirm für Gäste
   if (isMaintenance && !user) {
     return <NotfallLockout />;
   }
 
-  // 2. Eingeloggt als normaler User (keine Führung) während Notbetrieb -> Ausgegraut & Gesperrt
+  // 2. Eingeloggt als normaler User (keine Führung) während Notbetrieb -> Komplett gesperrt
   const isLockedForUser = isMaintenance && user && !isFuehrung;
 
   return (
     <main className="page-container">
-      {/* Red Banner oben bei Notbetrieb */}
+      {/* 3. Fettes Notfall-Banner ganz oben */}
       {isMaintenance && <NotfallBanner isFuehrung={isFuehrung} />}
 
+      {/* 4. Gesamter Seiteninhalt wird im Notbetrieb für normale User gesperrt */}
       <div style={{
-        opacity: isLockedForUser ? 0.4 : 1,
+        opacity: isLockedForUser ? 0.35 : 1,
         pointerEvents: isLockedForUser ? 'none' : 'auto',
         userSelect: isLockedForUser ? 'none' : 'auto',
         transition: 'opacity 0.3s ease'
       }}>
-        {/* Hero Section ohne das alte grüne Badge */}
+        {/* Hero Section */}
         <section className="hero-section">
           <div className="hero-badge">
             <Activity size={16} /> 24/7 Infrastruktur- & Versorgungsnetz Neubrücken
