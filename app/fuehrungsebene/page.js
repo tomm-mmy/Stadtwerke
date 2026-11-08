@@ -18,10 +18,15 @@ export default async function FuehrungsebenePage() {
     redirect('/unauthorized');
   }
 
-  if (!canAccessFuehrung(user)) {
+  // Strenger Check: Prüfen, ob der User in der globalen Blacklist (Blockiert) ist
+  const blockedList = global.blockedUsers || [];
+  if (blockedList.includes(user.id)) {
     redirect('/unauthorized');
   }
 
+  if (!canAccessFuehrung(user)) {
+    redirect('/unauthorized');
+  }
 
   const hasFullRights = isFullManagement(user);
 
