@@ -16,24 +16,23 @@ export default function BerichtModal({ isOpen, onClose, user }) {
 
     // Sendet den Post an den Kanal 1568953171643072622
     try {
-      await fetch('/api/discord/post-bericht', {
+      const response = await fetch('/api/discord/post-bericht', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          channelId: '1568953171643072622',
-          username: user?.username || 'Leitung / Personal',
           ort: ort,
           details: details
         })
       });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.error || 'Übermittlung fehlgeschlagen.');
       setStatus('Einsatzbericht erfolgreich als Post erstellt!');
       setTimeout(() => {
         setStatus('');
         onClose();
       }, 1500);
     } catch (err) {
-      setStatus('Bericht eingereicht!');
-      setTimeout(() => { setStatus(''); onClose(); }, 1500);
+      setStatus(err.message || 'Bericht konnte nicht gesendet werden.');
     }
   };
 
