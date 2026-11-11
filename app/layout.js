@@ -1,6 +1,12 @@
 import { cookies } from 'next/headers';
 import Navbar from './components/Navbar';
-import { getUserFromSession } from '@/lib/auth'; // oder wie deine Session-Funktion heißt
+import { getUserFromSession } from '../lib/auth';
+import './globals.css';
+
+export const metadata = {
+  title: 'Stadtwerke Neubrücken',
+  description: '24/7 Infrastruktur- & Versorgungsnetz Neubrücken',
+};
 
 export default async function RootLayout({ children }) {
   const cookieStore = await cookies();
@@ -8,8 +14,11 @@ export default async function RootLayout({ children }) {
   
   let user = null;
   if (sessionCookie) {
-    // Hier wird der User aus der Session geholt
-    user = await getUserFromSession(sessionCookie.value).catch(() => null);
+    try {
+      user = await getUserFromSession(sessionCookie.value);
+    } catch (e) {
+      user = null;
+    }
   }
 
   return (
