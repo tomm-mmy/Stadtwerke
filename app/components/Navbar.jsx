@@ -14,7 +14,6 @@ import {
   Shield, 
   Users, 
   GraduationCap, 
-  Building2, 
   Zap 
 } from 'lucide-react';
 
@@ -116,7 +115,8 @@ export default function Navbar({ user }) {
             </div>
           </div>
         ) : (
-          <a href="/api/auth/discord" className="btn-discord-login">
+          /* KORRIGIERT: Ohne /api/ vorne */
+          <a href="/auth/discord" className="btn-discord-login">
             Discord Anmelden
           </a>
         )}
