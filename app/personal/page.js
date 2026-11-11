@@ -22,11 +22,11 @@ export default async function PersonalPage() {
     redirect('/unauthorized');
   }
 
-
+  
   const allowedRoles = [
     '1490308727797059625', 
     '1490309261878624450', 
-    '1490307659411357716',
+    '1490307659411357716', 
     '1522887379030118450'  
   ];
 
@@ -34,7 +34,6 @@ export default async function PersonalPage() {
   if (!hasAccess) {
     redirect('/unauthorized');
   }
-
 
   const fullManagementRoles = ['1490308727797059625', '1490307659411357716', '1522887379030118450'];
   const hasFullRights = fullManagementRoles.some(roleId => user.roles.includes(roleId));
