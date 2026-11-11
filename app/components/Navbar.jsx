@@ -10,11 +10,11 @@ import {
   Lock, 
   Truck, 
   Bus, 
-  Train, 
   Shield, 
   Users, 
   GraduationCap, 
-  Zap 
+  Zap,
+  Wrench
 } from 'lucide-react';
 
 export default function Navbar({ user }) {
@@ -113,9 +113,9 @@ export default function Navbar({ user }) {
                 <span className="coming-soon-tag"><Lock size={10} /> Soon</span>
               </div>
 
-              <div className="dropdown-item disabled-nav-link sub-item">
-                <Train size={15} />
-                <span>Schienenverkehr</span>
+              <div className="dropdown-item disabled-nav-link">
+                <Wrench size={16} />
+                <span>Bau & Abriss</span>
                 <span className="coming-soon-tag"><Lock size={10} /> Soon</span>
               </div>
 
