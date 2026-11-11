@@ -20,6 +20,11 @@ import {
 export default function Navbar({ user }) {
   const isLoggedIn = !!user;
 
+  // Discord Avatar URL sicher generieren oder Fallback nutzen
+  const avatarUrl = user?.avatar 
+    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png` 
+    : null;
+
   return (
     <header className="navbar">
       {/* Brand Logo & Title */}
@@ -45,16 +50,20 @@ export default function Navbar({ user }) {
         {isLoggedIn ? (
           <div className="dropdown-wrapper">
             <div className="user-pill">
-              {user.avatar ? (
-                <Image 
-                  src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`} 
+              {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img 
+                  src={avatarUrl} 
                   alt={user.username} 
                   width={28} 
                   height={28} 
                   className="user-avatar"
+                  style={{ objectFit: 'cover' }}
                 />
               ) : (
-                <div className="user-avatar-placeholder">
+                <div className="user-avatar-placeholder" style={{
+                  width: '28px', height: '28px', borderRadius: '50%', background: '#38bdf8', color: '#070b14', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', fontSize: '12px'
+                }}>
                   {user.username?.charAt(0).toUpperCase()}
                 </div>
               )}
@@ -68,16 +77,10 @@ export default function Navbar({ user }) {
                 <span className="dropdown-title">{user.username}</span>
               </div>
 
-              {/* Aktive Bereiche */}
-              <div className="dropdown-section-title">Interne Bereiche</div>
-              <Link href="/mitarbeiter" className="dropdown-item">
-                <Shield size={16} /> Mitarbeiter-Portal
-              </Link>
+              {/* KATEGORIE 1: LEITUNG & VERWALTUNG */}
+              <div className="dropdown-section-title">Leitung & Verwaltung</div>
               <Link href="/fuehrungsebene" className="dropdown-item highlight">
                 <ShieldAlert size={16} /> Führungsebene
-              </Link>
-              <Link href="/entstoerungsdienst" className="dropdown-item">
-                <Zap size={16} /> Entstörungsdienst
               </Link>
               <Link href="/personal" className="dropdown-item">
                 <Users size={16} /> Personalabteilung
@@ -86,7 +89,16 @@ export default function Navbar({ user }) {
                 <GraduationCap size={16} /> Ausbildung & Lehre
               </Link>
 
-              {/* GESPERRTE ABTEILUNGEN (Coming Soon) */}
+              {/* KATEGORIE 2: OPERATIVER BETRIEB */}
+              <div className="dropdown-section-title">Operativer Betrieb</div>
+              <Link href="/mitarbeiter" className="dropdown-item">
+                <Shield size={16} /> Mitarbeiter-Portal
+              </Link>
+              <Link href="/entstoerungsdienst" className="dropdown-item">
+                <Zap size={16} /> Entstörungsdienst
+              </Link>
+
+              {/* KATEGORIE 3: IN ENTWICKLUNG (SOON) */}
               <div className="dropdown-section-title">In Entwicklung</div>
               
               <div className="dropdown-item disabled-nav-link">
@@ -115,7 +127,6 @@ export default function Navbar({ user }) {
             </div>
           </div>
         ) : (
-          /* KORRIGIERT: Ohne /api/ vorne */
           <a href="/auth/discord" className="btn-discord-login">
             Discord Anmelden
           </a>
