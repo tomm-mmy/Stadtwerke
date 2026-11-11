@@ -1,19 +1,21 @@
-import './globals.css';
+import { cookies } from 'next/headers';
 import Navbar from './components/Navbar';
+import { getUserFromSession } from '@/lib/auth'; // oder wie deine Session-Funktion heißt
 
-export const metadata = {
-  title: 'Stadtwerke Neubrücken',
-  description: 'Das Dashbaord  der Stadtwerke Neubrücken',
-  icons: {
-    icon: '/stadtwerkeneubrücken.webp',
-  },
-};
+export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get('discord_user');
+  
+  let user = null;
+  if (sessionCookie) {
+    // Hier wird der User aus der Session geholt
+    user = await getUserFromSession(sessionCookie.value).catch(() => null);
+  }
 
-export default function RootLayout({ children }) { 
   return (
     <html lang="de">
       <body>
-        <Navbar />
+        <Navbar user={user} />
         {children}
       </body>
     </html>
