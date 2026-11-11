@@ -27,7 +27,6 @@ export function canManageOperations(user) {
   ]);
 }
 
-
 export function canAccessFuehrung(user) {
   return checkUserRole(user, [
     ROLES.FUEHRUNGSEBENE, 
@@ -35,7 +34,6 @@ export function canAccessFuehrung(user) {
     ROLES.PERSONAL_LEITUNG
   ]);
 }
-
 
 export function isFullManagement(user) {
   return checkUserRole(user, [
