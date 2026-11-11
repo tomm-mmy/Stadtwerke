@@ -6,6 +6,9 @@ import './globals.css';
 export const metadata = {
   title: 'Stadtwerke Neubrücken',
   description: '24/7 Infrastruktur- & Versorgungsnetz Neubrücken',
+  icons: {
+    icon: '/iconn.png',
+  },
 };
 
 export default async function RootLayout({ children }) {
