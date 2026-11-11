@@ -5,7 +5,6 @@ import {
   ShieldAlert, 
   Users, 
   Power, 
-  UserX, 
   PlusCircle, 
   CheckCircle2, 
   Lock, 
@@ -95,7 +94,10 @@ export default function ClientFuehrung({ user, hasFullRights }) {
 
   // Kill Switch umschalten (Ein / Aus)
   const handleKillswitch = async () => {
-    if (!hasFullRights) return;
+    if (!hasFullRights) {
+      alert('Sicherheitsfehler: Keine Berechtigung für diese Aktion.');
+      return;
+    }
     const newState = !isMaintenance;
     const res = await fetch('/api/admin/system-state', {
       method: 'POST',
@@ -313,7 +315,7 @@ export default function ClientFuehrung({ user, hasFullRights }) {
 
           {!hasFullRights && (
             <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '1rem', borderRadius: '12px', color: '#f87171', marginBottom: '1.5rem' }}>
-              <Lock size={16} /> Hinweis: Als Hauptleitung sind für dich Notfall-Schalter gesperrt.
+              <Lock size={16} /> Hinweis: Für diesen Bereich ist die volle Management-Freigabe erforderlich.
             </div>
           )}
 
@@ -330,7 +332,8 @@ export default function ClientFuehrung({ user, hasFullRights }) {
               cursor: hasFullRights ? 'pointer' : 'not-allowed',
               display: 'flex',
               alignItems: 'center',
-              gap: '8px'
+              gap: '8px',
+              opacity: hasFullRights ? 1 : 0.6
             }}
           >
             <Power size={18} /> {isMaintenance ? 'Notbetrieb aufheben (Zurück zum Normalbetrieb)' : 'Kill Switch aktivieren (Website komplett offline nehmen)'}
