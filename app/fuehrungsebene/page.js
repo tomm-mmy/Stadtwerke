@@ -1,29 +1,29 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { canAccessFuehrung, isFullManagement } from '../mitarbeiter/utils/checkPermissions';
+import { getUserFromSession } from '../../lib/auth';
 import ClientFuehrung from './ClientFuehrung';
 
 export default async function FuehrungsebenePage() {
   const cookieStore = await cookies();
-  const userCookie = cookieStore.get('discord_user');
+  const sessionCookie = cookieStore.get('discord_user');
 
-  if (!userCookie) {
+  if (!sessionCookie) {
     redirect('/unauthorized');
   }
 
-  let user;
+  let user = null;
   try {
-    user = JSON.parse(userCookie.value);
+    user = await getUserFromSession(sessionCookie.value);
   } catch (err) {
+    user = null;
+  }
+
+  if (!user) {
     redirect('/unauthorized');
   }
 
-  // Strenger Check: Prüfen, ob der User in der globalen Blacklist (Blockiert) ist
-  const blockedList = global.blockedUsers || [];
-  if (blockedList.includes(user.id)) {
-    redirect('/unauthorized');
-  }
-
+  // Strenger Server-Check für die Führungsebene
   if (!canAccessFuehrung(user)) {
     redirect('/unauthorized');
   }
